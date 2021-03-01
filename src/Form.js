@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 
 const GCS_API = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyA7dlHVnMDTeovWPkXJ5Cq7thDAAgDjOdk&cx=89288bec62f180088&q='
 
@@ -14,8 +14,14 @@ function Form(props) {
     }
 
     function handleChange(event) {
-      setQuery(event.target.value);
+        setQuery(event.target.value);
+        
+        //updating search tags
+        // let tags = {}
+        // for (let tag in event.target.value.split(' ')) {tags[tag] = 0}
+        // props.updateSearch("search", tags);
     }
+
 
     return (
         <form class="search">
