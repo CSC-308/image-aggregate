@@ -5,7 +5,7 @@ import Results from './Results';
 function MyApp() {
     const [results, setResults] = useState([]);
 
-    const [companionTags, setTags] = useState({"search": {'g': 0}});
+    const [companionTags, setTags] = useState({"search": {'default': 0}});
     /*companionTags is a URL dictionary containing tag dictionaries.
     "search" is a special entry for images displayed by Results.js*/
 
@@ -17,6 +17,9 @@ function MyApp() {
     function updateTags(URL, tags){
         let temp = {...companionTags};
         temp[URL] = tags;
+        // console.log(URL);
+        // console.log(temp);
+        // console.log(tags);
         setTags(temp);
     }
     function URLtag(URL){

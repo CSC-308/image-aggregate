@@ -11,15 +11,18 @@ function Form(props) {
                 .then(response => response.json())
                 .then(data => props.handleSearch(data.items));
         }
+
+        //updating search tags
+        console.log(query);
+        let tags = {}
+        for (let tag of query.split(' ')) {tags[tag] = 0}
+        props.updateSearch("search", tags);
     }
 
     function handleChange(event) {
         setQuery(event.target.value);
         
-        //updating search tags
-        let tags = {}
-        for (let tag in event.target.value.split(' ')) {tags[tag] = 0}
-        props.updateSearch("search", tags);
+        
     }
 
     return (
