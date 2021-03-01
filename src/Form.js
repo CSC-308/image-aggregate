@@ -17,11 +17,10 @@ function Form(props) {
         setQuery(event.target.value);
         
         //updating search tags
-        // let tags = {}
-        // for (let tag in event.target.value.split(' ')) {tags[tag] = 0}
-        // props.updateSearch("search", tags);
+        let tags = {}
+        for (let tag in event.target.value.split(' ')) {tags[tag] = 0}
+        props.updateSearch("search", tags);
     }
-
 
     return (
         <form class="search">

@@ -31,10 +31,10 @@ class Tag extends React.Component {
         const string = "# "+this.state.name+" ("+this.state.score+")"
         //give 2 render methods based on if the tag has been voted or not
         return (
-            <t>{this.state.name}</t>
-            // <input type="button"
-            // value={string}
-            // onClick={this.handleClick} />
+            //<t>{this.state.name}</t>
+            <input type="button"
+            value={string}
+            onClick={this.handleClick} />
         );
     }
 }

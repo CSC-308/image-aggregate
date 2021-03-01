@@ -2,14 +2,16 @@ import React, {useRef} from 'react'
 import Tag from './Tag'
 
 function Tags(props) {
-    const dictags = useRef(props.URLtag(props.URL));
-    if (dictags.current == {}){
-        return (<t>ERR</t>);
-    }
+    const dictags = props.URLtag(props.URL);
+    console.log(dictags);
 
-    const tags = dictags.current.map(tkey => {
-        return (<Tag name={tkey} score={0}/>)
-    });
+    let tags = []
+    for (let tkey in dictags){
+        tags.push(<Tag name={tkey} score={0}/>);
+    }
+    // const tags = dictags.map(tkey => {
+    //     return (<Tag name={tkey} score={0}/>)
+    // });
     return tags;
 }
 
