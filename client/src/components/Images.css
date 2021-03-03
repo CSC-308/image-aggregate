@@ -1,0 +1,16 @@
+.ImageDiv {
+  max-height: 90%;
+}
+
+.ImageDiv img {
+  display: flex;
+  max-height: 100%;
+  width: auto;
+  margin: auto;
+}
+
+.TagsDiv {
+  height: 10%;
+  display: flex;
+  justify-content: center;
+}

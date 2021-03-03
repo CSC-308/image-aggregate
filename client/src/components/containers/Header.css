@@ -1,0 +1,56 @@
+.Header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Header div {
+  min-width: 33vw;
+  max-width: 33vw;
+  display: flex;
+}
+
+.UserDiv {
+  justify-content: left;
+}
+
+.UserDiv img {
+  position: relative;
+  left: 1%;
+  top: 10%;
+  max-height: 80%;
+  border-radius: 50%;
+}
+
+.UserDiv p {
+  position: relative;
+  left: 2%;
+  color: white;
+}
+
+.LoginDiv {
+  justify-content: right;
+}
+
+.LoginButton {
+  position: relative;
+  right: 2%;
+  top: 10%;
+  max-height: 80%;
+}
+
+.SearchDiv {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  color: white;
+}
+
+.Search {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.SearchTextBox {
+  width: 70%;
+}
