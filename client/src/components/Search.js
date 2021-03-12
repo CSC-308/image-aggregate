@@ -10,6 +10,11 @@ function Search(props) {
       return;
     }
 
+    props.updateSearchResults({
+      images: [],
+      tagNames: []
+    });
+
     fetch(GCS_API + query)
       .then(response => response.json())
       .then(result => props.updateSearchResults({
@@ -19,7 +24,7 @@ function Search(props) {
       .catch(err => console.log(err));
   }
 
-  async function handleChange(event) {
+  function handleChange(event) {
     setQuery(event.target.value);
   }
 
