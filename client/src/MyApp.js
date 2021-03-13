@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import {Router, Route, browserHistory} from 'react-router'
 import './MyApp.css'
 import Header from './components/containers/Header'
 import Body from './components/containers/Body'
@@ -23,7 +24,9 @@ function MyApp() {
         session={session}
         updateSession={setSession}
         updateSearchResults={setSearchResults} />
-      <Body searchResults={searchResults} />
+      <Body
+        searchResults={searchResults}
+        session={session} />
       <Footer />
     </div>
   )

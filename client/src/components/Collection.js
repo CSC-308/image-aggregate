@@ -23,3 +23,5 @@ function Collection(props) {
     </ul>
   )
 }
+
+export default Collection;

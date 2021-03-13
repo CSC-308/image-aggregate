@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {Link} from 'react-router-dom'
 import './Header.css'
 import LoginButton from '../buttons/LoginButton'
 import Search from '../Search'
@@ -10,8 +11,8 @@ function Header(props) {
   return (
     <div className="Header">
       <div className="UserDiv">
-        <img src={icon_link} alt=''/>
-        <p>{props.session.name}</p>
+          <img src={icon_link} alt=''/>
+          <p>{props.session.name}</p>
       </div>
       <div className="SearchDiv">
         <Search updateSearchResults={props.updateSearchResults} />
