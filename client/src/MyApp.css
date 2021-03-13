@@ -1,10 +1,9 @@
 .Header, .Footer {
-  background: #133f2e;
+  background: #e0eaff;
   height: 5vh;
-  outline: 2px solid black;
 }
 
 .Body {
   height: 90vh;
-  background: #18181c;
+  background: #ffffff;
 }
