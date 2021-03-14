@@ -53,4 +53,9 @@
 
 .SearchTextBox {
   width: 70%;
+  border: none;
+}
+
+.SearchButton {
+  border: none;
 }

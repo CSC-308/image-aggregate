@@ -5,11 +5,12 @@ import standard from '../../themes'
 const Button = styled.button`
   background: transparent;
   border-radius: 3px;
-  border: 2px solid ${standard.lightText};
-  color: white;
+  border: 2px solid ${standard.textColor};
+  color: ${standard.textColor};
   font-size: 20px;
   cursor: pointer;
   &:hover {
+    border: 2px solid ${standard.altText};
     color: ${standard.altText};
   }
 `;
