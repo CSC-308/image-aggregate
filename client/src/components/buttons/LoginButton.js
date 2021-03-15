@@ -20,10 +20,11 @@ function LoginButton(props) {
   }
 
   function logout() {
-    fetch('https://localhost:5000/google/test')
-      .then(response => response.json())
-      .then(result => props.updateSession(result))
-      .catch(err => console.log(err));
+    window.location = 'https://localhost:5000/google/logout';
+    // fetch('https://localhost:5000/google/logout')
+    //   .then(response => response.json())
+    //   .then(result => props.updateSession(result))
+    //   .catch(err => console.log(err));
   }
 
   return (

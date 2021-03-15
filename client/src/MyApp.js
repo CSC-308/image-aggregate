@@ -10,7 +10,7 @@ function MyApp() {
 
   useEffect(fetchSession, []);
 
-  async function fetchSession() {
+  function fetchSession() {
     fetch('https://localhost:5000/')
       .then(response => response.json())
       .then(result => setSession(result))
