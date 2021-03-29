@@ -4,8 +4,8 @@
 }
 
 .Header div {
-  min-width: 33vw;
-  max-width: 33vw;
+  width: 33vw;
+  height: 60%;
   display: flex;
 }
 
@@ -17,8 +17,6 @@
   position: relative;
   left: 1%;
   top: 10%;
-  max-height: 80%;
-  border-radius: 50%;
 }
 
 .UserDiv p {
@@ -29,13 +27,13 @@
 
 .LoginDiv {
   justify-content: right;
+  max-height: 100%;
 }
 
 .LoginButton {
   position: relative;
   right: 2%;
-  top: 10%;
-  max-height: 80%;
+  top: 20%;
 }
 
 .SearchDiv {
@@ -53,9 +51,12 @@
 
 .SearchTextBox {
   width: 70%;
-  border: none;
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  padding: 5px;
 }
 
 .SearchButton {
   border: none;
+  border-radius: 10px;
 }
