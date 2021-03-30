@@ -11,7 +11,7 @@ function MyApp() {
   useEffect(fetchSession, []);
 
   function fetchSession() {
-    fetch('https://localhost:5000/')
+    fetch('https://localhost:5000/user', { credentials: 'include' })
       .then(response => response.json())
       .then(result => setSession(result))
       .catch(err => console.log(err));

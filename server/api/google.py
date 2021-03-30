@@ -1,20 +1,14 @@
-import os
-import json
+import requests, json
 
-from flask import Flask, redirect, request, url_for, jsonify, session
-from flask_login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
+from flask import (
+    Flask,
+    redirect,
+    request,
+    session
 )
-from flask_wtf.csrf import CSRFProtect, generate_csrf
-from flask_cors import CORS
 from oauthlib.oauth2 import WebApplicationClient
-import requests
 
-from user import User
+from api import app, login_user, User
 
 GOOGLE_CLIENT_ID = (
     '64684270017-eos8emv0b652c8gni2uv7s6b5idktrq0.apps.googleusercontent.com'
@@ -24,63 +18,11 @@ GOOGLE_DISCOVERY_URL = (
     'https://accounts.google.com/.well-known/openid-configuration'
 )
 
-# Flask app setup
-app = Flask(__name__)
-app.config.update(
-    DEBUG=True,
-    SECRET_KEY="image_aggregate_secret",
-    SESSION_COOKIE_HTTPONLY=True,
-    REMEMBER_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax",
-)
-
-# CSRF setup
-csrf = CSRFProtect(app)
-
-# CORS setup
-cors = CORS(
-    app,
-    resources={r"*": {"origins": "http://localhost:8080"}},
-    expose_headers=["Content-Type", "X-CSRFToken"],
-    supports_credentials=True,
-)
-
-# User session management setup "https://flask-login.readthedocs.io/en/latest"
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.session_protection = "strong"
-
 # OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
-
-@app.route("/csrf")
-def get_csrf():
-    token = generate_csrf()
-    response = jsonify({"message": "CSRF cookie set"})
-    response.headers.set("X-CSRFToken", token)
-
-    return response
-
-# Flask-Login helper to retrieve a user from our db
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
-
-@app.route('/')
-def index():
-    print(current_user)
-    if current_user.is_authenticated:
-        return jsonify({
-            "id": current_user.id,
-            "name": current_user.name,
-            "email": current_user.email,
-            "picture": current_user.picture
-        })
-
-    return jsonify({})
 
 @app.route('/google/login')
 def google_login():
@@ -132,7 +74,8 @@ def google_login_callback():
     userinfo_response = requests.get(uri, headers=headers, data=body)
 
     if not userinfo_response.json().get("email_verified"):
-        return "User email not available or not verified by Google.", 400
+        print("User email not available or not verified by Google.")
+        return None
 
     user_id = userinfo_response.json()["sub"]
     user_name = userinfo_response.json()["given_name"]
@@ -143,20 +86,8 @@ def google_login_callback():
     if not User.get(user_id):
         User.create(user_id, user_name, user_email, user_picture)
 
-    # Begin user session by logging the user in
+    # Begin user session
     user = User(user_id, user_name, user_email, user_picture)
     login_user(user)
 
     return redirect('http://localhost:3000/')
-    # return redirect(url_for("index"))
-
-@login_required
-@app.route("/google/logout")
-def logout():
-    logout_user()
-
-    return redirect('http://localhost:3000/')
-    # return redirect(url_for("index"))
-
-if __name__ == "__main__":
-    app.run(ssl_context=('cert.pem', 'key.pem'))
