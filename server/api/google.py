@@ -1,55 +1,37 @@
-import json
-import os
+import requests, json
 
-from flask import Flask, redirect, request, url_for
-from flask_login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
+from flask import (
+    Flask,
+    redirect,
+    request,
+    session
 )
-from flask_cors import CORS
 from oauthlib.oauth2 import WebApplicationClient
-import requests
 
-from user import User
+from api import app, login_user, User
 
 GOOGLE_CLIENT_ID = (
     '64684270017-eos8emv0b652c8gni2uv7s6b5idktrq0.apps.googleusercontent.com'
-    )
+)
 GOOGLE_CLIENT_SECRET = 'UuBVmgkQkHOmBKRWOabgLEB_'
 GOOGLE_DISCOVERY_URL = (
     'https://accounts.google.com/.well-known/openid-configuration'
-    )
+)
 
-app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
-
-cors = CORS(app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
+# OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
-app.session = {}
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
-
-@app.route('/')
-def index():
-    return app.session
-
 @app.route('/google/login')
 def google_login():
+    # Find out what URL to hit for Google login
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
+    # Use library to construct the request for Google login and provide
+    # scopes that let you retrieve user's profile from Google
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
         redirect_uri=request.base_url + "/callback",
@@ -60,10 +42,15 @@ def google_login():
 
 @app.route('/google/login/callback')
 def google_login_callback():
+    # Get authorization code Google sent back to you.
     code = request.args.get("code")
+
+    # Find out what URL to hit to get tokens that allow you to ask for
+    # things on behalf of a user.
     google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
 
+    # Prepare and send a request to get tokens.
     token_url, headers, body = client.prepare_token_request(
         token_endpoint,
         authorization_response=request.url,
@@ -77,37 +64,30 @@ def google_login_callback():
         auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
     )
 
+    # Parse the tokens.
     client.parse_request_body_response(json.dumps(token_response.json()))
 
+    # Find and hit the URL from Google that gives you the user's profile
+    # information, including their Google profile image and email.
     userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
     uri, headers, body = client.add_token(userinfo_endpoint)
     userinfo_response = requests.get(uri, headers=headers, data=body)
 
-    if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
-        users_email = userinfo_response.json()["email"]
-        picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
-    else:
-        return "User email not available or not verified by Google.", 400
+    if not userinfo_response.json().get("email_verified"):
+        print("User email not available or not verified by Google.")
+        return None
 
-    user = User(unique_id, users_name, users_email, picture)
+    user_id = userinfo_response.json()["sub"]
+    user_name = userinfo_response.json()["given_name"]
+    user_email = userinfo_response.json()["email"]
+    user_picture = userinfo_response.json()["picture"]
 
-    if not User.get(unique_id):
-        User.create(unique_id, users_name, users_email, picture)
+    # If the user is not already in our database, add them.
+    if not User.get(user_id):
+        User.create(user_id, user_name, user_email, user_picture)
 
+    # Begin user session
+    user = User(user_id, user_name, user_email, user_picture)
     login_user(user)
-    app.session = vars(user)
 
     return redirect('http://localhost:3000/')
-
-@app.route("/google/logout")
-# @login_required
-def logout():
-    # logout_user()
-    app.session = {}
-
-    return redirect('http://localhost:3000/')
-
-if __name__ == "__main__":
-    app.run(ssl_context=('cert.pem', 'key.pem'))

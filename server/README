@@ -1,1 +1,4 @@
-pip install -r requirements.txt
+export FLASK_APP=api
+export FLASK_ENV=development
+pip install -e .
+flask run --cert=cert.pem --key=key.pem
