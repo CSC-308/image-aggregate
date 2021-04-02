@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './Images.css'
 import Tags from './Tags'
-import {addImage} from 'Collection'
+import addImage from './Collection'
 
 function Images(props) {
   {/* To open/close dropdown button
@@ -23,17 +23,17 @@ function Images(props) {
               src={url}
               alt={`Search result ${index}`} />
             {/* Dropdown button to create/add to collection */}
-            <button type="button" class="addButton" onClick={handleButtonClick}>+</button>
+            <button type="button" class="AddImage" onClick={handleButtonClick}>+</button>
             {open && (
-              <div class="dropdown">
+              <div className="Dropdown">
                 <ul>
-                  <button type="button" class="collectionButton">
+                  <button type="button" class="NewCollection">
                     Create Collection
                   </button>
                   {props.session.collections.map(collection => (
                     <button
                       type="button"
-                      class="collectionButton"
+                      class="Collection"
                       onClick={addImage(image)}>
                         {collection.name}
                     </button>

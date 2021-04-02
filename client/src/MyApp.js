@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react'
-import {Router, Route, browserHistory} from 'react-router'
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './MyApp.css'
 import Header from './components/containers/Header'
 import Body from './components/containers/Body'
+import Collections from './components/Collections'
 import Footer from './components/containers/Footer'
 
 function MyApp() {
@@ -20,16 +21,35 @@ function MyApp() {
 
   return (
     <div className="MyApp">
-      <Header
-        session={session}
-        updateSession={setSession}
-        updateSearchResults={setSearchResults} />
-      <Body
-        searchResults={searchResults}
-        session={session} />
+      <Router>
+        <Header
+          session={session}
+          updateSession={setSession}
+          updateSearchResults={setSearchResults} />
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/search" render={() => (
+            <Body
+              searchResults={searchResults}
+              session={session} />
+          )}
+          />
+          <Route path="/collections" render={() => (
+            <Collections session={session} />
+          )}
+          />
+        </Switch>
+      </Router>
+
       <Footer />
     </div>
   )
 }
+
+const Home = () => (
+  <div className="Body">
+    <h1>Home Page</h1>
+  </div>
+)
 
 export default MyApp;
