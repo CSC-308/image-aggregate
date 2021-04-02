@@ -2,7 +2,7 @@ import React from 'react'
 import Collection from './Collection'
 
 function Collections(props) {
-  const collections = props.collections;
+  const collections = props.session.collections;
 
   if (collections)
   {
