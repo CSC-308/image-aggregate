@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 
+
 const GCS_API = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyA7dlHVnMDTeovWPkXJ5Cq7thDAAgDjOdk&cx=89288bec62f180088&q='
 
 function Search(props) {
@@ -31,15 +32,16 @@ function Search(props) {
   return (
     <form class="Search">
       <input class="SearchTextBox"
-        type="text"
+        type="text" placeholder="Search"
         value={query}
         onChange={handleChange} />
-      <input class="SearchButton"
-        type="button"
-        value="Search"
+      <input class="SearchButton" alt="" type="button"
+  
         onClick={executeSearch} />
     </form>
   )
 }
 
 export default Search;
+
+

@@ -1,27 +1,11 @@
 .Image {
-  display: flex;
-  flex-direction: row;
-  width: 19vw;
-  margin-left: 5vw;
-  margin-top: 0.3vw;
-}
-
-.ImageDiv {
-  display: flex;
-  width: 100%;
+  display: inline-block;
 }
 
 .ImageDiv img {
+  display: block;
   width: 100%;
-  margin: auto;
-}
-
-.TagsDiv {
-  height: 10%;
-  display: flex;
-  justify-content: right;
-}
-
-.TagButton {
-  height: 26px;
+  
+  border: solid 1px lightgray;
+  border-radius: 5px;
 }

@@ -14,9 +14,9 @@ function Images(props) {
               alt={`Search result ${index}`}/>
           </div>
           <div className='TagsDiv'>
-            <Tags className='Tags'
+            {/* <Tags className='Tags'
               tagNames={props.searchResults.tagNames}
-              url={url}/>
+              url={url}/> */}
           </div>
         </div>
       );

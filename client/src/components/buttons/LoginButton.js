@@ -2,18 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import standard from '../../themes'
 
-const Button = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid ${standard.textColor};
-  color: ${standard.textColor};
-  font-size: 20px;
-  cursor: pointer;
-  &:hover {
-    border: 2px solid ${standard.altText};
-    color: ${standard.altText};
-  }
-`;
+
 
 function LoginButton(props) {
   function login() {
@@ -25,10 +14,10 @@ function LoginButton(props) {
   }
 
   return (
-    <Button className="LoginButton"
+    <button className="LoginButton"
       onClick={props.session.name ? logout : login}>
       {props.session.name ? 'Logout' : 'Login'}
-    </Button>
+    </button>
   );
 }
 
