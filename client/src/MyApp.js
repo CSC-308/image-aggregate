@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react'
+import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import './MyApp.css'
 import Header from './components/containers/Header'
 import Body from './components/containers/Body'
 import Footer from './components/containers/Footer'
+import Collections from './components/Collections'
 
 function MyApp() {
   const [session, setSession] = useState({});
@@ -19,12 +21,21 @@ function MyApp() {
 
   return (
     <div className="MyApp">
-      <Header
-        session={session}
-        updateSession={setSession}
-        updateSearchResults={setSearchResults} />
-      <Body searchResults={searchResults} />
-      <Footer />
+      <Router>
+        <Header
+          session={session}
+          updateSession={setSession}
+          updateSearchResults={setSearchResults} />
+        <Switch>
+          <Route path='/collections'>
+            <Collections session={session} />
+          </Route>
+          <Route path='/'>
+            <Body searchResults={searchResults} />
+          </Route>
+        </Switch>
+        <Footer />
+      </Router>
     </div>
   )
 }
