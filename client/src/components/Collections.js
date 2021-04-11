@@ -1,13 +1,25 @@
 import React from 'react'
-import Collection from './Collection'
 
 function Collections(props) {
   const collections = props.session.collections;
+
+  async function handleCreateCollection() {
+    
+  }
 
   if (collections)
   {
     return (
       <ul className="Body">
+        <button onClick={handleCreateCollection}>Create New Collection</button>
+        {collections.map((collection) => (
+          <p>{collection.name}</p>
+        ))}
+      </ul>
+    )
+  }
+      {/*<ul className="Body">
+        <button onClick={handleCreateCollection}>Create New Collection</button>
         {collections.map((collection) =>
           collection.images.map((image) => (
             <div className="Collection">
@@ -16,12 +28,13 @@ function Collections(props) {
               </li>
             </div>
           )))}
-      </ul>
+          </ul>
     )
-  }
+  }*/}
 
   return (
-    <div>
+    <div className="Body">
+      <button type="button" class="NewCollection" onClick={handleCreateCollection}>Create New Collection</button>
       <p>No collecions exist.</p>
     </div>
   )

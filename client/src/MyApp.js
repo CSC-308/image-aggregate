@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './MyApp.css'
 import Header from './components/containers/Header'
@@ -12,8 +12,8 @@ function MyApp() {
 
   useEffect(fetchSession, []);
 
-  async function fetchSession() {
-    fetch('https://localhost:5000/')
+  function fetchSession() {
+    fetch('https://localhost:5000/user', { credentials: 'include' })
       .then(response => response.json())
       .then(result => setSession(result))
       .catch(err => console.log(err));
@@ -22,34 +22,24 @@ function MyApp() {
   return (
     <div className="MyApp">
       <Router>
-        <Header
-          session={session}
-          updateSession={setSession}
-          updateSearchResults={setSearchResults} />
+      <Header
+        session={session}
+        updateSession={setSession}
+        updateSearchResults={setSearchResults} />
         <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/search" render={() => (
+          <Route path='/search' render={() => (
             <Body
               searchResults={searchResults}
               session={session} />
-          )}
-          />
-          <Route path="/collections" render={() => (
+          )} />
+          <Route path='/collections' render={() => (
             <Collections session={session} />
-          )}
-          />
+          )} />
         </Switch>
       </Router>
-
       <Footer />
     </div>
   )
 }
-
-const Home = () => (
-  <div className="Body">
-    <h1>Home Page</h1>
-  </div>
-)
 
 export default MyApp;

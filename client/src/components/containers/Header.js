@@ -12,7 +12,7 @@ function Header(props) {
     <div className="Header">
       <div className="UserDiv">
         <Link to="/collections">
-          <img src={icon_link} alt='' />
+          <img src={icon_link} alt=''/>
           <p>{props.session.name}</p>
         </Link>
       </div>

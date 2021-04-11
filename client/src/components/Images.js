@@ -1,15 +1,19 @@
 import React, { useState } from 'react'
 import './Images.css'
 import Tags from './Tags'
-import addImage from './Collection'
+import Collection from './Collection'
+import Collections from './Collections'
 
 function Images(props) {
   {/* To open/close dropdown button
       However, all buttons for images open/close at same time
   */}
   const [open, setOpen] = useState(false);
-  function handleButtonClick() {
+  async function handleDropdown() {
     setOpen(!open);
+  }
+  async function handleAddImage() {
+
   }
   {/* End of addition */}
 
@@ -23,21 +27,18 @@ function Images(props) {
               src={url}
               alt={`Search result ${index}`} />
             {/* Dropdown button to create/add to collection */}
-            <button type="button" class="AddImage" onClick={handleButtonClick}>+</button>
+            <button type="button" class="AddImage" onClick={handleDropdown}>+</button>
             {open && (
               <div className="Dropdown">
                 <ul>
-                  <button type="button" class="NewCollection">
-                    Create Collection
-                  </button>
-                  {props.session.collections.map(collection => (
+                  {props.session && props.session.collections ? props.session.collections.map(collection => (
                     <button
                       type="button"
                       class="Collection"
-                      onClick={addImage(image)}>
+                      onClick={handleAddImage}>
                         {collection.name}
                     </button>
-                  ))}
+                  )) : <p>No collections</p>}
                 </ul>
               </div>
             )}
