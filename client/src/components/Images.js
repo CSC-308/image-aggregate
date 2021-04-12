@@ -45,15 +45,9 @@ function Images(props) {
             {/* End of addition */}
           </div>
           <div className='TagsDiv'>
-<<<<<<< HEAD
-            {<Tags className='Tags'
-              tagNames={props.searchResults.tagNames}
-              url={url}/>}
-=======
             <Tags className='Tags'
               tagNames={props.searchResults.tagNames}
               url={url} />
->>>>>>> 44e393f115d7e28ecd63465f0546528cda0ce87f
           </div>
         </div>
       );
