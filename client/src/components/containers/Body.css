@@ -9,3 +9,9 @@
     flex-direction: column;
   }
 }
+
+@media only screen and (min-width: 1000px) {
+  .Body {
+    column-count: 4;
+  }
+}

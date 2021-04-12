@@ -4,8 +4,16 @@
 
 .ImageDiv img {
   display: block;
-  width: 100%;
+  width: 99%;
   
   border: solid 1px lightgray;
   border-radius: 5px;
+}
+
+.TagButton{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  padding: 5px;
 }
