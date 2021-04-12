@@ -5,7 +5,9 @@ import Images from '../Images'
 function Body(props) {
   return (
     <div className="Body">
-      <Images className='Images' searchResults={props.searchResults}/>
+      <Images className='Images'
+        searchResults={props.searchResults}
+        session={props.session}/>
     </div>
   );
 }
