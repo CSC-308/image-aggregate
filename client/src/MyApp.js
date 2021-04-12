@@ -5,6 +5,7 @@ import Header from './components/containers/Header'
 import Body from './components/containers/Body'
 import Footer from './components/containers/Footer'
 import Collections from './components/Collections'
+import Login from './components/login/Login'
 
 function MyApp() {
   const [session, setSession] = useState({});
@@ -27,10 +28,13 @@ function MyApp() {
           updateSession={setSession}
           updateSearchResults={setSearchResults} />
         <Switch>
-          <Route path='/collections'>
+          <Route exact path='/collections'>
             <Collections session={session} />
           </Route>
-          <Route path='/'>
+          <Route exact path='/login'>
+            <Login />
+          </Route>
+          <Route exact path='/'>
             <Body searchResults={searchResults} />
           </Route>
         </Switch>
