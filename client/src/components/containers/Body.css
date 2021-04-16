@@ -9,3 +9,16 @@
     flex-direction: column;
   }
 }
+
+@media only screen and (min-width: 1000px) {
+  .Body {
+    column-count: 4;
+  }
+}
+
+.Login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

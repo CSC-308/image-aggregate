@@ -1,0 +1,6 @@
+.SignUp form, .SignIn form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
