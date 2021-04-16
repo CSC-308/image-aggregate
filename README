@@ -12,5 +12,5 @@ Installation: pip install pylint
 
 Use: http://pylint.pycqa.org/en/latest/user_guide/run.html
 
-Pylint or ESLint with their default configuration must be ran (automatically or
+Pylint or ESLint with their default configuration (standard style guide) must be ran (automatically or
 manually) on every file created and or edited by a developer.
