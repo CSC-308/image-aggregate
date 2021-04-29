@@ -13,9 +13,6 @@ jobs:
         - "3.6"
       install:
         - cd server/
-        - export FLASK_APP=api
-        - export FLASK_ENV=development
         - pip install setuptools -e .
       script:
         - pytest
-        - flask run --cert=cert.pem --key=key.pem
