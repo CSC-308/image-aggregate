@@ -12,8 +12,6 @@ jobs:
       python:
         - "3.6"
       install:
-        - cd server && pip install setuptools -e .
-      before_script:
-        - cd server/
+        - cd server/ && pip install setuptools -e .
       script:
         - pytest
