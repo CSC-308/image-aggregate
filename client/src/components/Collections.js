@@ -1,41 +1,34 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import Collection from './Collection'
+
+const temp = 'https://cdn.mos.cms.futurecdn.net/vChK6pTy3vN3KbYZ7UU7k3-1200-80.jpg';
 
 function Collections(props) {
-  const collections = props.session.collections;
+  const [collections, setCollections] = useState([]);
+  const [newCollection, setNewCollection] = useState('');
 
-  async function handleCreateCollection() {
-    
+  useEffect(() => setCollections(props.session.collections || []), []);
+
+  function handleCreateCollection() {
+    /* Also needs to be reflected in the backend */
+    if (newCollection.length > 0 &&
+      !collections.find(x => x === newCollection)) {
+      setCollections([...collections, newCollection]);
+      setNewCollection('');
+    }
   }
 
-  if (collections)
-  {
-    return (
-      <ul className="Body">
-        <button onClick={handleCreateCollection}>Create New Collection</button>
-        {collections.map((collection) => (
-          <p>{collection.name}</p>
-        ))}
-      </ul>
-    )
+  function handleChange(event) {
+    setNewCollection(event.target.value);
   }
-      {/*<ul className="Body">
-        <button onClick={handleCreateCollection}>Create New Collection</button>
-        {collections.map((collection) =>
-          collection.images.map((image) => (
-            <div className="Collection">
-              <li key={image.url}>
-                <img src={image.url} alt="${image.name}" />
-              </li>
-            </div>
-          )))}
-          </ul>
-    )
-  }*/}
 
   return (
-    <div className="Body">
-      <button type="button" class="NewCollection" onClick={handleCreateCollection}>Create New Collection</button>
-      <p>No collecions exist.</p>
+    <div className='Collections'>
+      <form className='AddCollection'>
+        <input type='text' value={newCollection} onChange={handleChange} />
+        <input type='button' value='Create New Collection' onClick={handleCreateCollection} />
+      </form>
+      {collections}
     </div>
   )
 }

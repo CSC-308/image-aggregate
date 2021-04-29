@@ -30,13 +30,13 @@ function Search(props) {
   }
 
   return (
-    <form class="Search">
-      <input class="SearchTextBox"
+    <form className="Search">
+      <input className="SearchTextBox"
         type="text" placeholder="Search"
         value={query}
         onChange={handleChange} />
-      <input class="SearchButton" alt="" type="button"
-  
+      <input className="SearchButton" alt="" type="button"
+
         onClick={executeSearch} />
     </form>
   )
