@@ -12,7 +12,7 @@ jobs:
       python:
         - "3.6"
       install:
-        - pip install setuptools -e .
+        - cd server && pip install setuptools -e .
       before_script:
         - cd server/
       script:
