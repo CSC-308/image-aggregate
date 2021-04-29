@@ -7,6 +7,7 @@ import Footer from './components/containers/Footer'
 import Collections from './components/Collections'
 import Login from './components/login/Login'
 
+/* Testing travis CI build */
 function MyApp() {
   const [session, setSession] = useState({});
   const [searchResults, setSearchResults] = useState({});
