@@ -2,7 +2,7 @@ import React from 'react'
 
 function GoogleLoginButton(props) {
   function login() {
-    window.location = 'https://localhost:5000/google/login';
+    window.location = process.env.REACT_APP_GOOGLE_LOGIN_URL;
   }
 
   return (
