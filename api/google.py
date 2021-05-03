@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, os
 
 from flask import (
     Flask,
@@ -10,10 +10,8 @@ from oauthlib.oauth2 import WebApplicationClient
 
 from api import app, login_user, User
 
-GOOGLE_CLIENT_ID = (
-    '64684270017-eos8emv0b652c8gni2uv7s6b5idktrq0.apps.googleusercontent.com'
-)
-GOOGLE_CLIENT_SECRET = 'UuBVmgkQkHOmBKRWOabgLEB_'
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GOOGLE_DISCOVERY_URL = (
     'https://accounts.google.com/.well-known/openid-configuration'
 )

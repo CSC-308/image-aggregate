@@ -1,6 +1,8 @@
+# keep all your environment variables in a file, (ie. export GOOGLE_CLIENT_ID='')
+# and run 'source file_name' to export them all before running the server.
+
 export FLASK_APP=api
 export FLASK_ENV=development
 pip install setuptools
 pip install -e .
 flask run --cert=cert.pem --key=key.pem
-
