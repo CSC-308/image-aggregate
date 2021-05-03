@@ -1,18 +1,10 @@
-jobs:
-  include:
-    - language: node_js
-      node_js:
-        - "12"
-      before_script:
-          - cd client/
-      script:
-          - npm install && CI=false npm run build
+language: python
 
-    - language: python
-      python:
-        - "3.6"
-      install:
-        - cd server/
-        - pip install setuptools -e .
-      script:
-        - pytest
+python:
+  - "3.6"
+
+install:
+  - pip install setuptools -e .
+
+script:
+  - pytest

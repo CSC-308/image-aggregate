@@ -1,16 +1,5 @@
-~~~ Javascript ~~~
-
-We use ESLint to monitor our code quality and style.
-
-Installation and use: https://eslint.org/docs/user-guide/getting-started
-
-~~~ Python ~~~
-
-We use Pylint to monitor our code quality and style.
-
-Installation: pip install pylint
-
-Use: http://pylint.pycqa.org/en/latest/user_guide/run.html
-
-Pylint or ESLint with their default configuration (standard style guide) must be ran (automatically or
-manually) on every file created and or edited by a developer.
+export FLASK_APP=api
+export FLASK_ENV=development
+pip install setuptools
+pip install -e .
+flask run --cert=cert.pem --key=key.pem
