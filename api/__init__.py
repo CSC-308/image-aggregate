@@ -74,4 +74,4 @@ def get_current_user():
 def logout():
     logout_user()
 
-    return redirect('http://localhost:3000/')
+    return redirect(os.getenv('LOGOUT_REDIRECT'))

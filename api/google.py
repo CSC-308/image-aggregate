@@ -88,4 +88,4 @@ def google_login_callback():
     user = User(user_id, user_name, user_email, user_picture)
     login_user(user)
 
-    return redirect('http://localhost:3000/')
+    return redirect(os.getenv('LOGIN_REDIRECT'))
