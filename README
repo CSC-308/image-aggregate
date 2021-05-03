@@ -3,3 +3,4 @@ export FLASK_ENV=development
 pip install setuptools
 pip install -e .
 flask run --cert=cert.pem --key=key.pem
+
