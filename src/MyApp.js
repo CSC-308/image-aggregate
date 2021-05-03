@@ -7,15 +7,16 @@ import Footer from './components/containers/Footer'
 import Collections from './components/Collections'
 import Login from './components/login/Login'
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 function MyApp() {
   const [session, setSession] = useState({});
   const [searchResults, setSearchResults] = useState({});
 
   useEffect(fetchSession, []);
-  console.log(process.env.REACT_APP_SERVER_URL);
 
   function fetchSession() {
-    fetch(process.env.REACT_APP_SERVER_URL, { credentials: 'include' })
+    fetch(`${SERVER_URL}/user`, { credentials: 'include' })
       .then(response => response.json())
       .then(result => setSession(result))
       .catch(err => console.log(err));
