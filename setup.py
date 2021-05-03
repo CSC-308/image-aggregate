@@ -11,5 +11,6 @@ setup(
         'requests',
         'pyopenssl',
         'oauthlib',
+        'gunicorn',
     ],
 )
