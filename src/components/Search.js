@@ -1,8 +1,5 @@
 import React, {useState} from 'react'
 
-
-const GCS_API = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyA7dlHVnMDTeovWPkXJ5Cq7thDAAgDjOdk&cx=89288bec62f180088&q='
-
 function Search(props) {
   const [query, setQuery] = useState('');
 
@@ -16,7 +13,7 @@ function Search(props) {
       tagNames: []
     });
 
-    fetch(GCS_API + query)
+    fetch(process.env.REACT_APP_GCS_API_URL + query)
       .then(response => response.json())
       .then(result => props.updateSearchResults({
         images: result.items,

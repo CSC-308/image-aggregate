@@ -7,15 +7,15 @@ import Footer from './components/containers/Footer'
 import Collections from './components/Collections'
 import Login from './components/login/Login'
 
-/* Testing travis CI build */
 function MyApp() {
   const [session, setSession] = useState({});
   const [searchResults, setSearchResults] = useState({});
 
   useEffect(fetchSession, []);
+  console.log(process.env.REACT_APP_SERVER_URL);
 
   function fetchSession() {
-    fetch('https://localhost:5000/user', { credentials: 'include' })
+    fetch(process.env.REACT_APP_SERVER_URL, { credentials: 'include' })
       .then(response => response.json())
       .then(result => setSession(result))
       .catch(err => console.log(err));
