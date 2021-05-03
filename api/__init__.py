@@ -37,7 +37,7 @@ import api.google
 # Learn more at: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS.
 cors = CORS(
     app,
-    resources={ r"*": { "origins": "http://localhost:3000" } },
+    resources={ r"*": { "origins": os.getenv('ORIGINS') } },
     supports_credentials=True,
 )
 
