@@ -5,7 +5,7 @@ import standard from '../../themes'
 
 function LoginButton(props) {
   function logout() {
-    window.location = 'https://localhost:5000/logout';
+    window.location = process.env.REACT_APP_LOGOUT_URL;
   }
 
   return (
