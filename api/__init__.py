@@ -25,9 +25,9 @@ app = Flask(__name__)
 app.config.update(
     DEBUG=True,
     SECRET_KEY=os.getenv('APP_SECRET_KEY'),
-    SESSION_COOKIE_HTTPONLY=True,
-    REMEMBER_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax",
+    # SESSION_COOKIE_HTTPONLY=True,
+    # REMEMBER_COOKIE_HTTPONLY=True,
+    # SESSION_COOKIE_SAMESITE="Lax",
 )
 
 # This import must appear after initialization of Flask app.
