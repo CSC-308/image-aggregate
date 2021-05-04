@@ -55,10 +55,12 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
+    print(session)
     return jsonify({"message": "Hello world!"})
 
 @app.route('/user')
 def get_current_user():
+    print(session)
     if current_user.is_authenticated:
         return jsonify({
             "id": current_user.id,
