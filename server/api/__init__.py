@@ -58,6 +58,7 @@ except Exception as error:
     print(error,sys.stderr)
     print("malformed or missing config.json",sys.stderr)
 
+# Use this to jsonify database objects
 def harsh_jsonify(post_object):
     return jsonify(json.loads(dumps(post_object)))
 
@@ -68,19 +69,27 @@ def get_post(image_id):
     if (post != None):
         app.logger.info(post)
         return harsh_jsonify(post)
+    app.logger.info("Image_id: "+image_id+" not found.")
     return jsonify({})
 
-# @app.route('/vote', ['POST'])
-# def vote():
-#     images = database['Images']
-#     tags = database['Tags']
+# NOTE: Does not work until database structure changes
+# @app.route('/vote/<image_id>/<tag_id>')
+# def vote(image_id, tag_id):
+#     app.logger.info("attempting vote"+
+#     " with image_id: "+str(image_id)+
+#     " and tag_id: "+str(tag_id))
 
-#     app.logger.info("attempting vote for user_id: "+current_user.id+
-#         " with image_id: "+str(image_id)+
-#         " and tag_id: "+str(tag_id))
-#     post = images.find_one(image_id)
-#     if tag_id in tags:
-#
+#     image_id, tag_id = ObjectId(image_id), ObjectId(tag_id)
+#     queryObject = {'_id': image_id}
+
+#     post = database['Images'].find_one(queryObject)
+#     if post:
+#         for tag in post['tags']:
+#             if (tag['_id']==tag_id):
+#                 tag['votes']+=1
+#                 return harsh_jsonify(database['Images'].find_one_and_update(
+#                 queryObject, {'$inc': {'tags['+str(tag_id)+']': 1}}))
+#     return jsonify({})
 
 # User session management setup.
 # Learn more at: https://flask-login.readthedocs.io/en/latest
