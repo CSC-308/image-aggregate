@@ -72,6 +72,16 @@ def get_post(image_id):
     app.logger.info("Image_id: "+image_id+" not found.")
     return jsonify({})
 
+@app.route('/search/<tag_id>')
+def search_by_tag(tag_id):
+    tag = database['Tags'].find_one({'_id': ObjectId(tag_id)})
+    if tag:
+        page = []
+        for image_id in tag['images described']:
+            page.append(database['Images'].find_one({'_id': image_id}))
+        return harsh_jsonify(page)
+    return jsonify({})
+
 # NOTE: Does not work until database structure changes
 # @app.route('/vote/<image_id>/<tag_id>')
 # def vote(image_id, tag_id):
