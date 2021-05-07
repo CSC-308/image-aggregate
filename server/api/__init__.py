@@ -8,6 +8,9 @@ from flask import (
     jsonify,
     session
 )
+
+import pymongo, sys, logging
+
 from flask_login import (
     LoginManager,
     current_user,
@@ -29,6 +32,7 @@ app.config.update(
     REMEMBER_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
 )
+logging.basicConfig(level=logging.DEBUG)
 
 # This import must appear after initialization of Flask app.
 import api.google
@@ -37,9 +41,45 @@ import api.google
 # Learn more at: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS.
 cors = CORS(
     app,
-    resources={ r"*": { "origins": "http://localhost:3000" } },
+    resources={ r"*": { "origins": "*" } },
     supports_credentials=True,
 )
+
+# mongodb setup
+database = None
+try:
+    with open("./api/config.json","r") as c_file:
+        connection_url = json.load(c_file)["ATLAS_URL"]
+        app.logger.info("connecting with "+connection_url)
+        database = pymongo.MongoClient(connection_url).Image_Aggregate
+except Exception as error:
+    print(error,sys.stderr)
+    print("malformed or missing config.json",sys.stderr)
+
+def json_friendly(post_object):
+    post_object['_id'] = str(post_object['_id'])
+    for tag in post_object['tags']:
+        tag['_id']=str(tag['_id'])
+
+@app.route('/post/<image_id>')
+def get_post(image_id):
+    queryObject = {"_id":{"$oid":image_id}}
+    post = database.Images.find_one(queryObject)
+    app.logger.info(post)
+    json_friendly(post)
+    return jsonify(post)
+
+# @app.route('/vote', ['POST'])
+# def vote():
+#     images = database['Images']
+#     tags = database['Tags']
+
+#     app.logger.info("attempting vote for user_id: "+current_user.id+
+#         " with image_id: "+str(image_id)+
+#         " and tag_id: "+str(tag_id))
+#     post = images.find_one(image_id)
+#     if tag_id in tags:
+#
 
 # User session management setup.
 # Learn more at: https://flask-login.readthedocs.io/en/latest
