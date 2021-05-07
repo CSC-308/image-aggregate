@@ -10,6 +10,8 @@ from flask import (
 )
 
 import pymongo, sys, logging
+from bson.objectid import ObjectId
+from bson.json_util import dumps
 
 from flask_login import (
     LoginManager,
@@ -56,18 +58,17 @@ except Exception as error:
     print(error,sys.stderr)
     print("malformed or missing config.json",sys.stderr)
 
-def json_friendly(post_object):
-    post_object['_id'] = str(post_object['_id'])
-    for tag in post_object['tags']:
-        tag['_id']=str(tag['_id'])
+def harsh_jsonify(post_object):
+    return jsonify(json.loads(dumps(post_object)))
 
 @app.route('/post/<image_id>')
 def get_post(image_id):
-    queryObject = {"_id":{"$oid":image_id}}
+    queryObject = {'_id': ObjectId(image_id)}
     post = database.Images.find_one(queryObject)
-    app.logger.info(post)
-    json_friendly(post)
-    return jsonify(post)
+    if (post != None):
+        app.logger.info(post)
+        return harsh_jsonify(post)
+    return jsonify({})
 
 # @app.route('/vote', ['POST'])
 # def vote():
