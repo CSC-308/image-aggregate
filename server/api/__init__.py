@@ -17,7 +17,20 @@ from flask_login import (
 )
 from flask_cors import CORS
 
+# Connecting to MongoDB
+import pymongo, logging
+from bson.objectid import ObjectId
+from bson.json_util import dumps
+
+client = pymongo.MongoClient("")
+db = client.get_database('Image_Aggregate')
+
+# from Garett's code to jsonify db obj
+def harsh_jsonify(db_object):
+    return jsonify(json.loads(dumps(db_object)))
+
 from api.user import User
+from api.collection import Collection
 
 # Flask app setup.
 # Learn more at: https://flask-session.readthedocs.io/en/latest/ (session).
@@ -29,6 +42,7 @@ app.config.update(
     REMEMBER_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
 )
+logging.basicConfig(level=logging.DEBUG)
 
 # This import must appear after initialization of Flask app.
 import api.google
@@ -75,3 +89,27 @@ def logout():
     logout_user()
 
     return redirect('http://localhost:3000/')
+
+@app.route('/user/collections', methods=['GET'])
+def get_current_user_collections():
+    query = db.Users.find_one({'_id': ObjectId(current_user.id)})
+    output = []
+
+    for collectionID in query.collections:
+        output.append(db['Image Collections'].find_one({'_id': collectionID}))
+
+    if len(output) > 0:
+        return harsh_jsonify(output)
+
+    app.logger.info("User_id: " + current_user.id + " has no collections.")
+    return jsonify({})
+
+@app.route('/user/collections/<id>', methods=['GET'])
+def get_collection(id):
+    output = Collection.get(id)
+
+    if output is not None:
+        return harsh_jsonify(output)
+
+    app.logger.info("Collection_id:" + id + " not found in " + "User_id: " + current_user.id + " collections.")
+    return jsonify({})
