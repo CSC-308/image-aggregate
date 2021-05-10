@@ -43,7 +43,7 @@ import api.google
 # Learn more at: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS.
 cors = CORS(
     app,
-    resources={ r"*": { "origins": "*" } },
+    resources={ r"*": { "origins": "http://localhost:3000/" } },
     supports_credentials=True,
 )
 
@@ -72,7 +72,17 @@ def get_post(image_id):
     app.logger.info("Image_id: "+image_id+" not found.")
     return jsonify({})
 
-@app.route('/search/<tag_id>')
+@app.route('/search/<tag_name>')
+def search_by_name(tag_name):
+    tag = database['Tags'].find_one({'name': tag_name})
+    if tag:
+        page = []
+        for image_id in tag['images described']:
+            page.append(database['Images'].find_one({'_id': image_id}))
+        return harsh_jsonify(page)
+    return jsonify({})
+
+@app.route('/searchid/<tag_id>')
 def search_by_tag(tag_id):
     tag = database['Tags'].find_one({'_id': ObjectId(tag_id)})
     if tag:
