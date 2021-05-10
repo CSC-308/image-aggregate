@@ -12,5 +12,7 @@ setup(
         'pyopenssl',
         'oauthlib',
         'gunicorn',
+        'pymongo',
+        'dnspython',
     ],
 )
