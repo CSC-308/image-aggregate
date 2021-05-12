@@ -103,6 +103,18 @@ def get_post(image_id):
     logging.info("Image_id: %s not found.", image_id)
     return jsonify({})
 
+@app.route('/search/<tag_name>')
+def search_by_name(tag_name):
+    tag = db['Tags'].find_one({'name': tag_name})
+    if tag:
+        page = []
+        for image_id in tag['images described']:
+            page.append(db['Images'].find_one({'_id': image_id}))
+        logging.info(page)
+        return harsh_jsonify(page)
+    logging.info("Tag_name: %s not found.", tag_name)
+    return jsonify({})
+
 @app.route('/search/<tag_id>')
 def search_by_tag(tag_id):
     tag = db.Tags.find_one({'_id': ObjectId(tag_id)})
