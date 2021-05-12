@@ -43,13 +43,22 @@ function MyApp() {
       .catch(err => console.error(err));
   }
 
+  function addSearchResults(results) {
+    setSearchResults({
+      images: [...results.images, ...(searchResults.images || [])],
+      tagNames: [...results.tagNames, ...(searchResults.tagNames || [])]
+    });
+  }
+
   return (
     <div className="MyApp">
       <Router>
         <Header
           session={session}
           updateSession={setSession}
-          updateSearchResults={setSearchResults} />
+          updateSearchResults={setSearchResults}
+          addSearchResults={addSearchResults}
+        />
         <Switch>
           <Route exact path='/collections'>
             <Collections session={session} updateSession={fetchSession} />

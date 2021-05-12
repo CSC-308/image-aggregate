@@ -14,44 +14,53 @@ function Images(props) {
   function handleAddImage() {
   }
 
+  function postFormat(url, collections, index) {
+    return (
+      <div className='Image'>
+        <div className='ImageDiv'>
+          <img src={url} alt={`image ${index}`} />
+        </div>
+        <div className='AddToCollectionDiv'>
+          <button
+            type="button"
+            className="AddImage"
+            onClick={handleDropdown}>
+            +
+          </button>
+          {open && (
+            <div className="Dropdown">
+              {collections?.map(collection =>
+                <button
+                  key={collection.name}
+                  type="button"
+                  onClick={handleAddImage}>
+                    {collection.name}
+                </button>
+              ) || <p>No collections</p>}
+            </div>
+          )}
+        </div>
+        <div className='TagsDiv'>
+          <Tags
+            className='Tags'
+            tagNames={props.searchResults?.tagNames}
+            url={url} />
+        </div>
+      </div>
+    );
+  }
+
   const images = props.searchResults?.images?.map((image, index) => {
+    const collections = props.session?.collections;
+
     if (image.pagemap?.cse_image) {
       const url = image.pagemap?.cse_image[0]?.src;
-      const collections = props.session?.collections;
 
-      return (
-        <div className='Image'>
-          <div className='ImageDiv'>
-            <img src={url} alt={`image ${index}`} />
-          </div>
-          <div className='AddToCollectionDiv'>
-            <button
-              type="button"
-              className="AddImage"
-              onClick={handleDropdown}>
-              +
-            </button>
-            {open && (
-              <div className="Dropdown">
-                {collections?.map(collection =>
-                  <button
-                    key={collection.name}
-                    type="button"
-                    onClick={handleAddImage}>
-                      {collection.name}
-                  </button>
-                ) || <p>No collections</p>}
-              </div>
-            )}
-          </div>
-          <div className='TagsDiv'>
-            <Tags
-              className='Tags'
-              tagNames={props.searchResults?.tagNames}
-              url={url} />
-          </div>
-        </div>
-      );
+      return postFormat(url, collections, index);
+    } else if (image['image URL']) {
+      const url = image['image URL'];
+
+      return postFormat(url, collections, index);
     } else {
       return (
         <div className="Image"></div>
@@ -59,7 +68,7 @@ function Images(props) {
     }
   });
 
-  return images ? images : [];
+  return images || [];
 }
 
 export default Images;

@@ -18,7 +18,10 @@ function Header(props) {
       </div>
       <div className="SearchDiv">
         <Link to="/">
-          <Search updateSearchResults={props.updateSearchResults} />
+          <Search
+            updateSearchResults={props.updateSearchResults}
+            addSearchResults={props.addSearchResults}
+          />
         </Link>
       </div>
       <div className="LoginDiv">

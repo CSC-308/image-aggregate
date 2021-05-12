@@ -1,9 +1,12 @@
 import React, {useState} from 'react'
 
+const GCS_URL = process.env.REACT_APP_GCS_API_URL;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 function Search(props) {
   const [query, setQuery] = useState('');
 
-  function executeSearch() {
+  async function executeSearch() {
     if (query.length === 0) {
       return;
     }
@@ -13,9 +16,24 @@ function Search(props) {
       tagNames: []
     });
 
-    fetch(process.env.REACT_APP_GCS_API_URL + query)
+    searchDatabase(query.split(' ')[0]);
+    searchWeb(query);
+  }
+
+  async function searchDatabase(query) {
+    fetch(SERVER_URL + '/search/' + query)
       .then(response => response.json())
-      .then(result => props.updateSearchResults({
+      .then(result => props.addSearchResults({
+        images: result,
+        tagNames: [query]
+      }))
+      .catch(err => console.log(err));
+  }
+
+  async function searchWeb(query) {
+    fetch(GCS_URL + query)
+      .then(response => response.json())
+      .then(result => props.addSearchResults({
         images: result.items,
         tagNames: query.split(' ')
       }))
@@ -33,7 +51,6 @@ function Search(props) {
         value={query}
         onChange={handleChange} />
       <input className="SearchButton" alt="" type="button"
-
         onClick={executeSearch} />
     </form>
   )
