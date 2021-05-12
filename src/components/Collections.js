@@ -1,34 +1,65 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
+import {Link} from 'react-router-dom'
+import './Collections.css'
 import Collection from './Collection'
 
-const temp = 'https://cdn.mos.cms.futurecdn.net/vChK6pTy3vN3KbYZ7UU7k3-1200-80.jpg';
-
 function Collections(props) {
-  const [collections, setCollections] = useState([]);
-  const [newCollection, setNewCollection] = useState('');
+  const [collections, setCollections] = useState(
+    props.session.collections || []
+  );
+  const [collectionName, setCollectionName] = useState('');
 
-  useEffect(() => setCollections(props.session.collections || []), []);
+  function isValidCollectionName(name) {
+    return name.length > 0 && !collections.find(collection => {
+      return collection.name == name;
+    });
+  }
 
-  function handleCreateCollection() {
-    /* Also needs to be reflected in the backend */
-    if (newCollection.length > 0 &&
-      !collections.find(x => x === newCollection)) {
+  function createNewCollection() {
+    const name = collectionName.trim();
+
+    if (isValidCollectionName(name)) {
+      // ToDo: This should be created in the backend instead
+      //
+      // createNewCollectionInBackend(name);
+      // props.updateSession();
+      //
+      // For now we'll just create a temporary one
+      const newCollection = {name: name, images: [], id: '0'};
       setCollections([...collections, newCollection]);
-      setNewCollection('');
+      setCollectionName('');
+    } else {
+      alert('Invalid collection name');
     }
   }
 
-  function handleChange(event) {
-    setNewCollection(event.target.value);
+  function handleCollectionNameChange(event) {
+    setCollectionName(event.target.value);
   }
 
   return (
     <div className='Collections'>
-      <form className='AddCollection'>
-        <input type='text' value={newCollection} onChange={handleChange} />
-        <input type='button' value='Create New Collection' onClick={handleCreateCollection} />
+      <form>
+        <input className='NewCollectionTextBox'
+          type='text'
+          value={collectionName}
+          onChange={handleCollectionNameChange}
+        />
+        <input className='NewCollectionButton'
+          type='button'
+          value='Create New Collection'
+          onClick={createNewCollection}
+        />
       </form>
-      {collections}
+      {collections.map(collection =>
+        <div key={collection.id} className='CollectionNameDiv'>
+          <Link to={`/collections/${collection.name}`}>
+            <button className='CollectionNameButton'>
+              {collection.name}
+            </button>
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
