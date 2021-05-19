@@ -40,6 +40,7 @@ logging.basicConfig(level=logging.DEBUG)
 # This import must appear after initialization of Flask app.
 import api.google
 from api.collection import Collection
+from api.image import Image
 
 # CORS setup.
 # Learn more at: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS.
@@ -161,7 +162,7 @@ def get_current_user_collections():
         logging.info("User: %s has no collections.", current_user.name)
         return jsonify({})
     elif request.method == 'POST':
-        collectionToAdd = request.get_json()
+        collectionToAdd = json.loads(request.get_json())
         newCollection = Collection.create(db, collectionToAdd, ObjectId(current_user.id))
 
         if newCollection is None:
@@ -220,4 +221,16 @@ def update_collection(collection_id, img_id):
     elif request.method == 'DELETE':
         logging.info("Image_id: %s does not exist in Collection_id: %s.", str(img_id), str(collection_id))
         return jsonify({}), 404
+
+@app.route('/images', method=['POST'])
+def add_image():
+    imageToAdd = json.loads(request.get_json())
+    newImage = Image.create(db, imageToAdd)
+
+    if newImage is None:
+        logging.info("Image: %s already exists in database.", imageToAdd['name'])
+        return jsonify({}), 404
+
+    logging.info(newImage)
+    return harsh_jsonify(newImage), 201
         
