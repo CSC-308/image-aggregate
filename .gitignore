@@ -28,4 +28,4 @@ yarn-error.log*
 package-lock.json
 package-lock.json
 .eslintcache
-ATT87195.env
+.env
