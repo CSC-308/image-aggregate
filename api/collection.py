@@ -1,13 +1,5 @@
 class Collection():
 
-    def __init__(self, collection_id, name, description, creator, private):
-        self.id = collection_id
-        self.name = name
-        self.description = description
-        self.creator = creator
-        self.private = private
-        self.images = []
-
     @staticmethod
     def create(db, collection, creator_id):
         query_object = {

@@ -1,4 +1,5 @@
 import json, requests, os, sys, logging
+from pymongo import collection
 
 import pymongo
 from pymongo import collection
@@ -154,9 +155,6 @@ def unvote(image_id, tag_id):
 
 @app.route('/user/collections', methods=['GET', 'POST'])
 def get_current_user_collections():
-    if not current_user.is_authenticated:
-        return jsonify([]), 200
-
     if request.method == 'GET':
         user = db['Users'].find_one({'_id': ObjectId(current_user.id)})
         output = []
@@ -168,15 +166,14 @@ def get_current_user_collections():
             logging.info(output)
             return harsh_jsonify(output)
 
-        logging.info("User: %s has no collections.", current_user.first_name)
-        return jsonify(output)
+        logging.info("User: %s has no collections.", current_user.name)
+        return jsonify({})
     elif request.method == 'POST':
         collectionToAdd = json.loads(request.get_json())
         newCollection = Collection.create(db, collectionToAdd, ObjectId(current_user.id))
 
         if newCollection is None:
-            logging.info("Collection: %s already exists in User: %s collections.",
-                    collectionToAdd['name'], current_user.first_name)
+            logging.info("Collection: %s already exists in User: %s collections.", collectionToAdd['name'], current_user.name)
             return jsonify({}), 404
 
         logging.info(newCollection)
