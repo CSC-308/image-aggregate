@@ -12,9 +12,9 @@ class Collection():
 
         user = db['Users'].find_one({'_id': creator_id})
 
-        for collectionID in user.collections:
-            userCollection = db['Image Collections'].find_one({'_id': collectionID})
-            if collection['name'] == userCollection['name']:
+        for collection_id in user.collections:
+            user_collection = db['Image Collections'].find_one({'_id': collection_id})
+            if collection['name'] == user_collection['name']:
                 return None
 
         collection_id = db['Image Collections'].insert__one(query_object)
@@ -31,9 +31,9 @@ class Collection():
         return db['Image Collections'].find_one({'_id': collection_id})
 
     @staticmethod
-    def addImage(db, collection_id, img_id):
+    def addImage(db, collection_id, img):
         return db['Image Collections'].update({'_id': collection_id}, {'$push': {'images': img_id}})
 
     @staticmethod
-    def removeImage(db, collection_id, img_id):
+    def removeImage(db, collection_id, img):
         return db['Image Collections'].update({'_id': collection_id}, {'$pull': {'images': img_id}})
