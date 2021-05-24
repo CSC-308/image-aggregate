@@ -15,7 +15,7 @@ function Search(props) {
       images: [],
       tagNames: []
     });
-    props.updatePostResults({})
+    props.updatePostResults([])
 
     searchDatabase(query.split(' ')[0]);
     searchWeb(query);
@@ -25,7 +25,7 @@ function Search(props) {
     console.log(SERVER_URL + '/search/' + query);
     fetch(SERVER_URL + '/search/' + query)
       .then(response => response.json())
-      .then(result => props.updatePostResults(result.items))
+      .then(result => props.updatePostResults(result))
       .catch(err => console.log(err));
   }
 
