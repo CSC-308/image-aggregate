@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 function Tag(props) {
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(props.score ? props.score : 0);
   const [voted, setVoted] = useState(false);
   const name = props.name;
 
