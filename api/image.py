@@ -16,3 +16,8 @@ class Image():
     @staticmethod
     def get(db, img_id):
         return db['Images'].find_one({'_id': img_id})
+
+    @staticmethod
+    def get_images(db, image_ids):
+        return [image for image in db['Images'].find()
+                if str(image['_id']) in image_ids]
