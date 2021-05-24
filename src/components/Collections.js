@@ -1,13 +1,24 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import './Collections.css'
 import Collection from './Collection'
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 function Collections(props) {
-  const [collections, setCollections] = useState(
-    props.session.collections || []
-  );
+  const [collections, setCollections] = useState([]);
   const [collectionName, setCollectionName] = useState('');
+
+  useEffect(fetchCollections, [props.session.collections]);
+
+  async function fetchCollections() {
+    if (props.session.collections) {
+      fetch(`${SERVER_URL}/user/collections`, { credentials: 'include' })
+        .then(response => response.json())
+        .then(result => setCollections(result))
+        .catch(err => console.error(err));
+    }
+  }
 
   function isValidCollectionName(name) {
     return name.length > 0 && !collections.find(collection => {
@@ -31,6 +42,9 @@ function Collections(props) {
     } else {
       alert('Invalid collection name');
     }
+  }
+
+  function deleteCollection(name) {
   }
 
   function handleCollectionNameChange(event) {
