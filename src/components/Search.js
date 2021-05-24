@@ -15,25 +15,24 @@ function Search(props) {
       images: [],
       tagNames: []
     });
+    props.updatePostResults({})
 
     searchDatabase(query.split(' ')[0]);
     searchWeb(query);
   }
 
   async function searchDatabase(query) {
+    console.log(SERVER_URL + '/search/' + query);
     fetch(SERVER_URL + '/search/' + query)
       .then(response => response.json())
-      .then(result => props.addSearchResults({
-        images: result,
-        tagNames: [query]
-      }))
+      .then(result => props.updatePostResults(result.items))
       .catch(err => console.log(err));
   }
 
   async function searchWeb(query) {
     fetch(GCS_URL + query)
       .then(response => response.json())
-      .then(result => props.addSearchResults({
+      .then(result => props.updateSearchResults({
         images: result.items,
         tagNames: query.split(' ')
       }))

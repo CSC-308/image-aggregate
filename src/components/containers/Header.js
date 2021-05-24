@@ -20,7 +20,7 @@ function Header(props) {
         <Link to="/">
           <Search
             updateSearchResults={props.updateSearchResults}
-            addSearchResults={props.addSearchResults}
+            updatePostResults={props.updatePostResults}
           />
         </Link>
       </div>

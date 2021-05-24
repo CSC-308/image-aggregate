@@ -16,6 +16,7 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 function MyApp() {
   const [session, setSession] = useState({});
   const [searchResults, setSearchResults] = useState({});
+  const [postResults, setPostResults] = useState([]);
 
   useEffect(fetchSession, []);
 
@@ -43,13 +44,6 @@ function MyApp() {
       .catch(err => console.error(err));
   }
 
-  function addSearchResults(results) {
-    setSearchResults({
-      images: [...results.images, ...(searchResults.images || [])],
-      tagNames: [...results.tagNames, ...(searchResults.tagNames || [])]
-    });
-  }
-
   return (
     <div className="MyApp">
       <Router>
@@ -57,7 +51,7 @@ function MyApp() {
           session={session}
           updateSession={setSession}
           updateSearchResults={setSearchResults}
-          addSearchResults={addSearchResults}
+          updatePostResults={setPostResults}
         />
         <Switch>
           <Route exact path='/collections'>
@@ -79,7 +73,7 @@ function MyApp() {
             <Login />
           </Route>
           <Route exact path='/'>
-            <Body searchResults={searchResults} />
+            <Body searchResults={searchResults} postResults={postResults} />
           </Route>
         </Switch>
         <Footer />
