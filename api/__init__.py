@@ -1,6 +1,7 @@
 import json, requests, os, sys, logging
 
 import pymongo
+from pymongo import collection
 
 from bson.objectid import ObjectId
 from bson.json_util import dumps
@@ -23,6 +24,8 @@ from flask_login import (
 from flask_cors import CORS
 
 from api.user import User
+from api.collection import Collection
+from api.image import Image
 
 # Flask app setup.
 # Learn more at: https://flask-session.readthedocs.io/en/latest/ (session).
@@ -38,7 +41,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 # This import must appear after initialization of Flask app.
 import api.google
-from api.collection import Collection
 
 # CORS setup.
 # Learn more at: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS.
@@ -78,6 +80,7 @@ def get_current_user():
             "first_name": current_user.first_name,
             "last_name": current_user.last_name,
             "email": current_user.email,
+            "collections": current_user.collections,
         })
 
     return jsonify({})
@@ -136,19 +139,96 @@ def unvote(image_id, tag_id):
                 +", modified_count: "+str(result.modified_count)+"}")
     return jsonify({})
 
-@app.route('/user/collections', methods=['GET'])
+@app.route('/user/collections', methods=['GET', 'POST'])
 def get_current_user_collections():
-    query = db.Users.find_one({'_id': current_user.id})
-    output = {}
-    i = 0
+    if request.method == 'GET':
+        user = db['Users'].find_one({'_id': ObjectId(current_user.id)})
+        output = []
 
-    for collection_id in query.collections:
-        output[i] = db['Image Collections'].find_one({'_id': collection_id})
-        i += 1
+        for collectionID in user['collections']:
+            output.append(Collection.get(db, collectionID))
 
-    return jsonify(output)
+        if len(output) > 0:
+            logging.info(output)
+            return harsh_jsonify(output)
 
-@app.route('/user/collections/<id>', methods=['GET'])
+        logging.info("User: %s has no collections.", current_user.name)
+        return jsonify({})
+    elif request.method == 'POST':
+        collectionToAdd = json.loads(request.get_json())
+        newCollection = Collection.create(db, collectionToAdd, ObjectId(current_user.id))
+
+        if newCollection is None:
+            logging.info("Collection: %s already exists in User: %s collections.", collectionToAdd['name'], current_user.name)
+            return jsonify({}), 404
+
+        logging.info(newCollection)
+        return harsh_jsonify(newCollection), 201
+
+@app.route('/user/collections/<collection_id>', methods=['GET', 'DELETE'])
 def get_collection(collection_id):
-    output = Collection.get(db, collection_id)
-    return jsonify(output)
+    if request.method == 'GET':
+        collection = Collection.get(db, ObjectId(collection_id))
+
+        if collection is not None:
+            logging.info(collection)
+            return harsh_jsonify(collection)
+
+        logging.info("Collection_id: %s not found in User: %s collections.",
+                str(collection_id), current_user.name)
+        return jsonify({}), 404
+    elif request.method == 'DELETE':
+        deleted_query = Collection.delete(db, ObjectId(collection_id))
+
+        if deleted_query.acknowledged is True:
+            logging.info(deleted_query)
+            resp = jsonify(deleted_query.deleted_count), 204
+            return resp
+
+        logging.info("Collection_id: %s not found in User: %s collections.",
+                str(collection_id), current_user.name)
+        return jsonify({}), 404
+
+@app.route('/user/collections/<collection_id>/<img_id>', methods=['POST', 'DELETE'])
+def update_collection(collection_id, img_id):
+    collection = Collection.get(db, ObjectId(collection_id))
+
+    if collection is None:
+        logging.info("Collection_id: %s not found in User: %s collections.",
+                str(collection_id), current_user.name)
+        return jsonify({}), 404
+
+    for image_id in collection['images']:
+        if img_id.equals(image_id):
+            if request.method == 'POST':
+                logging.info("Image_id: %s already exists in Collection_id: %s.",
+                        str(img_id), str(collection_id))
+                return jsonify({}), 404
+            elif request.method == 'DELETE':
+                updated_query = Collection.removeImage(db,
+                        ObjectId(collection_id), image_id)
+                logging.info(updated_query)
+                resp = jsonify(updated_query), 204
+                return resp
+
+    if request.method == 'POST':
+        updated_query = Collection.addImage(db, ObjectId(collection_id), ObjectId(img_id))
+        logging.info(updated_query)
+        resp = jsonify(updated_query), 201
+        return resp
+    elif request.method == 'DELETE':
+        logging.info("Image_id: %s does not exist in Collection_id: %s.",
+                str(img_id), str(collection_id))
+        return jsonify({}), 404
+
+@app.route('/images', methods=['POST'])
+def add_image():
+    image_to_add = json.loads(request.get_json())
+    new_image = Image.create(db, image_to_add)
+
+    if new_image is None:
+        logging.info("Image: %s already exists in database.", image_to_add['name'])
+        return jsonify({}), 404
+
+    logging.info(new_image)
+    return harsh_jsonify(new_image), 201

@@ -1,15 +1,18 @@
 class Image():
-    def __init__(self, image_id, image_url, tags):
-        self.id = image_id
-        self.url = image_url
-        self.tags = tags
 
     @staticmethod
-    def create(db, image_url, tags):
+    def create(db, image):
         query_object = {
-            'image URL': image_url,
-            'tags': tags
+            'image URL': image['image URL'],
+            'tags': image['tags']
         }
 
-        db.Images.insert_one(query_object)
-        return 0
+        if db['Images'].find_one({'url': image['image URL']}) is not None:
+            return None
+
+        image_id = db['Images'].insert_one(query_object)
+        return Image.get(db, image_id)
+
+    @staticmethod
+    def get(db, img_id):
+        return db['Images'].find_one({'_id': img_id})

@@ -2,12 +2,13 @@ from flask_login import UserMixin
 from bson.objectid import ObjectId
 
 class User(UserMixin):
-    def __init__(self, user_id, first_name, last_name, email, password):
+    def __init__(self, user_id, first_name, last_name, email, password, collections):
         self.id = str(user_id)
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = password
+        self.collections = [str(collection) for collection in collections]
 
     @staticmethod
     def create(db, first_name, last_name, email, password):
@@ -27,7 +28,7 @@ class User(UserMixin):
 
         if user is not None:
             return User(user['_id'], user['first name'], user['last name'],
-                    user['email'], user['password'])
+                    user['email'], user['password'], user['collections'])
 
         return None
 
