@@ -14,7 +14,7 @@ function Images(props) {
   function handleAddImage() {
   }
 
-  function postFormat(url, collections, index) {
+  function postFormat(url, collections, index, tags=[]) {
     return (
       <div className='Image'>
         <div className='ImageDiv'>
@@ -44,6 +44,7 @@ function Images(props) {
           <Tags
             className='Tags'
             tagNames={props.searchResults?.tagNames}
+            postData={tags}
             url={url} />
         </div>
       </div>
@@ -57,10 +58,6 @@ function Images(props) {
       const url = image.pagemap?.cse_image[0]?.src;
 
       return postFormat(url, collections, index);
-    } else if (image['image URL']) {
-      const url = image['image URL'];
-
-      return postFormat(url, collections, index);
     } else {
       return (
         <div className="Image"></div>
@@ -68,7 +65,21 @@ function Images(props) {
     }
   });
 
-  return images || [];
+  const posts = props.postResults?.map((post, index) => {
+    const collections = props.session?.collections;
+
+    if (post['image URL']) {
+      const url = post['image URL'];
+
+      return postFormat(url, collections, index, post.tags);
+    } else {
+      return (
+        <div className="Image"></div>
+      );
+    }
+  });
+
+  return [...posts || [], ...images || []];
 }
 
 export default Images;

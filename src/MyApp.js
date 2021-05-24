@@ -14,6 +14,7 @@ function MyApp() {
   const [session, setSession] = useState({});
   const [collections, setCollections] = useState([]);
   const [searchResults, setSearchResults] = useState({});
+  const [postResults, setPostResults] = useState([]);
 
   useEffect(fetchSession, []);
 
@@ -48,7 +49,7 @@ function MyApp() {
           session={session}
           updateSession={setSession}
           updateSearchResults={setSearchResults}
-          addSearchResults={addSearchResults}
+          updatePostResults={setPostResults}
         />
         <Switch>
           <Route exact path='/collections'>
@@ -70,7 +71,7 @@ function MyApp() {
             <Login />
           </Route>
           <Route exact path='/'>
-            <Body searchResults={searchResults} />
+            <Body searchResults={searchResults} postResults={postResults} />
           </Route>
         </Switch>
         <Footer />

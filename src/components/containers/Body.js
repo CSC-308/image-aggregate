@@ -7,6 +7,7 @@ function Body(props) {
     <div className="Body">
       <Images className='Images'
         searchResults={props.searchResults}
+        postResults={props.postResults}
         session={props.session}/>
     </div>
   );
