@@ -93,7 +93,7 @@ def logout():
 def harsh_jsonify(post_object):
     return jsonify(json.loads(dumps(post_object)))
 
-@app.route('/post/<image_id>')
+@app.route('/post/<image_id>', methods=['GET'])
 def get_post(image_id):
     query_object = {'_id': ObjectId(image_id)}
     post = db.Images.find_one(query_object)
@@ -115,34 +115,26 @@ def search_by_name(tag_name):
     logging.info("Tag_name: %s not found.", tag_name)
     return jsonify({})
 
-@app.route('/search/<tag_id>')
-def search_by_tag(tag_id):
-    tag = db.Tags.find_one({'_id': ObjectId(tag_id)})
-    if tag:
-        page = []
-        for image_id in tag['images described']:
-            page.append(db.Images.find_one({'_id': image_id}))
-        return harsh_jsonify(page)
+# increment votes by one.
+# test with /vote/606d2585618eb2fcae6391c1/606d2703618eb2fcae6391c2
+@app.route('/vote/<image_id>/<tag_id>')
+def vote(image_id, tag_id):
+    query = {'_id': ObjectId(image_id), 'tags._id': ObjectId(tag_id)}
+    newvals = {'$inc': {'tags.$.votes': 1}}
+    result = db.Images.update_one(query, newvals)
+    logging.info("updateResult {acknowledged: "+str(result.acknowledged)
+                +", modified_count: "+str(result.modified_count)+"}")
     return jsonify({})
 
-# NOTE: Does not work until database structure changes
-# @app.route('/vote/<image_id>/<tag_id>')
-# def vote(image_id, tag_id):
-#     app.logger.info("attempting vote"+
-#     " with image_id: "+str(image_id)+
-#     " and tag_id: "+str(tag_id))
-
-#     image_id, tag_id = ObjectId(image_id), ObjectId(tag_id)
-#     queryObject = {'_id': image_id}
-
-#     post = database['Images'].find_one(queryObject)
-#     if post:
-#         for tag in post['tags']:
-#             if (tag['_id']==tag_id):
-#                 tag['votes']+=1
-#                 return harsh_jsonify(database['Images'].find_one_and_update(
-#                 queryObject, {'$inc': {'tags['+str(tag_id)+']': 1}}))
-#     return jsonify({})
+# decrease votes by one. Test function, not permanent implementation (i hope)
+@app.route('/unvote/<image_id>/<tag_id>')
+def unvote(image_id, tag_id):
+    query = {'_id': ObjectId(image_id), 'tags._id': ObjectId(tag_id)}
+    newvals = {'$inc': {'tags.$.votes': -1}}
+    result = db.Images.update_one(query, newvals)
+    logging.info("updateResult {acknowledged: "+str(result.acknowledged)
+                +", modified_count: "+str(result.modified_count)+"}")
+    return jsonify({})
 
 @app.route('/user/collections', methods=['GET'])
 def get_current_user_collections():
