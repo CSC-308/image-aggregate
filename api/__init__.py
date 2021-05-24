@@ -12,7 +12,8 @@ from flask import (
     request,
     url_for,
     jsonify,
-    session
+    session,
+    make_response
 )
 from flask_login import (
     LoginManager,
@@ -106,6 +107,18 @@ def get_post(image_id):
     logging.info("Image_id: %s not found.", image_id)
     return jsonify({})
 
+@app.route('/posts', methods=['POST', 'OPTIONS'])
+def get_posts():
+    if request.method == 'POST':
+        image_ids = request.get_json()['image_ids']
+
+        return harsh_jsonify(Image.get_images(db, image_ids))
+
+    resp = make_response()
+    resp.headers['Access-Control-Allow-Headers'] = 'content-type'
+
+    return resp
+
 @app.route('/search/<tag_name>')
 def search_by_name(tag_name):
     tag = db['Tags'].find_one({'name': tag_name})
@@ -141,6 +154,9 @@ def unvote(image_id, tag_id):
 
 @app.route('/user/collections', methods=['GET', 'POST'])
 def get_current_user_collections():
+    if not current_user.is_authenticated:
+        return jsonify([]), 200
+
     if request.method == 'GET':
         user = db['Users'].find_one({'_id': ObjectId(current_user.id)})
         output = []
@@ -152,14 +168,15 @@ def get_current_user_collections():
             logging.info(output)
             return harsh_jsonify(output)
 
-        logging.info("User: %s has no collections.", current_user.name)
-        return jsonify({})
+        logging.info("User: %s has no collections.", current_user.first_name)
+        return jsonify(output)
     elif request.method == 'POST':
         collectionToAdd = json.loads(request.get_json())
         newCollection = Collection.create(db, collectionToAdd, ObjectId(current_user.id))
 
         if newCollection is None:
-            logging.info("Collection: %s already exists in User: %s collections.", collectionToAdd['name'], current_user.name)
+            logging.info("Collection: %s already exists in User: %s collections.",
+                    collectionToAdd['name'], current_user.first_name)
             return jsonify({}), 404
 
         logging.info(newCollection)
@@ -175,7 +192,7 @@ def get_collection(collection_id):
             return harsh_jsonify(collection)
 
         logging.info("Collection_id: %s not found in User: %s collections.",
-                str(collection_id), current_user.name)
+                str(collection_id), current_user.first_name)
         return jsonify({}), 404
     elif request.method == 'DELETE':
         deleted_query = Collection.delete(db, ObjectId(collection_id))
@@ -186,7 +203,7 @@ def get_collection(collection_id):
             return resp
 
         logging.info("Collection_id: %s not found in User: %s collections.",
-                str(collection_id), current_user.name)
+                str(collection_id), current_user.first_name)
         return jsonify({}), 404
 
 @app.route('/user/collections/<collection_id>/<img_id>', methods=['POST', 'DELETE'])
@@ -195,7 +212,7 @@ def update_collection(collection_id, img_id):
 
     if collection is None:
         logging.info("Collection_id: %s not found in User: %s collections.",
-                str(collection_id), current_user.name)
+                str(collection_id), current_user.first_name)
         return jsonify({}), 404
 
     for image_id in collection['images']:
