@@ -9,6 +9,7 @@ from flask import (
 from oauthlib.oauth2 import WebApplicationClient
 
 from api import app, login_user, User
+from api.__init__ import db
 
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
@@ -75,17 +76,17 @@ def google_login_callback():
         print("User email not available or not verified by Google.")
         return None
 
-    user_id = userinfo_response.json()["sub"]
+    # user_id = userinfo_response.json()["sub"]
     user_name = userinfo_response.json()["given_name"]
     user_email = userinfo_response.json()["email"]
-    user_picture = userinfo_response.json()["picture"]
+    # user_picture = userinfo_response.json()["picture"]
 
     # If the user is not already in our database, add them.
-    if not User.get(user_id):
-        User.create(user_id, user_name, user_email, user_picture)
+    user = User.find(db, user_email)
+    if not user:
+        user = User.create(db, user_name, None, user_email, 'password')
 
     # Begin user session
-    user = User(user_id, user_name, user_email, user_picture)
     login_user(user)
 
     return redirect(os.getenv('LOGIN_REDIRECT'))

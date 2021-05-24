@@ -1,26 +1,41 @@
 from flask_login import UserMixin
-
-USERS = [] # Temporary "database"
+from bson.objectid import ObjectId
 
 class User(UserMixin):
-    def __init__(self, user_id, name, email, picture):
-        self.id = user_id
-        self.name = name
+    def __init__(self, user_id, first_name, last_name, email, password):
+        self.id = str(user_id)
+        self.first_name = first_name
+        self.last_name = last_name
         self.email = email
-        self.picture = picture
+        self.password = password
 
     @staticmethod
-    def create(user_id, name, email, picture):
-        # Add user to our database
-        USERS.append(User(user_id, name, email, picture))
+    def create(db, first_name, last_name, email, password):
+        user_id = db.Users.insert({
+            'first name': first_name,
+            'last name': last_name,
+            'email': email,
+            'password': password,
+            'collections': []
+        })
 
-        return 0
+        return User.get(db, user_id)
 
     @staticmethod
-    def get(user_id):
-        # Find user in our database
-        for user in USERS:
-            if user.id == user_id:
-                return user
+    def get(db, user_id):
+        user = db.Users.find_one({ '_id': ObjectId(user_id) })
+
+        if user is not None:
+            return User(user['_id'], user['first name'], user['last name'],
+                    user['email'], user['password'])
+
+        return None
+
+    @staticmethod
+    def find(db, email):
+        user = db.Users.find_one({'email': email})
+
+        if user is not None:
+            return User.get(db, user['_id'])
 
         return None

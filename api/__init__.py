@@ -63,7 +63,7 @@ db = db_client.get_database('Image_Aggregate')
 # Should return None if the user is not found or invalid user_id.
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return User.get(db, user_id)
 
 @app.route('/')
 def index():
@@ -71,13 +71,13 @@ def index():
 
 @app.route('/user')
 def get_current_user():
-    print(session)
     if current_user.is_authenticated:
         return jsonify({
             "id": current_user.id,
-            "name": current_user.name,
+            "name": current_user.first_name,
+            "first_name": current_user.first_name,
+            "last_name": current_user.last_name,
             "email": current_user.email,
-            "picture": current_user.picture
         })
 
     return jsonify({})
