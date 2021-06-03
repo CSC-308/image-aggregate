@@ -11,8 +11,8 @@ def vote(db, image_id, tag_str):
     query = {'_id': ObjectId(image_id), 'tags._id': ObjectId(tag_id)}
     newvals = {'$inc': {'tags.$.votes': 1}}
     result = db.Images.update_one(query, newvals)
-    if result.ok==False and db.find_one({'_id': image_id}):
-        image_tag(db, image_id)
+    if not result.modified_count and db.Images.find_one({'_id': image_id}):
+        image_tag(db, image_id, tag_str)
 
 # returns objectID of tag. makes one if necessary if create_new is true.
 def tag_name_id(db, tag_str, create_new=True):

@@ -110,10 +110,14 @@ def search_by_name(tag_name):
 
 @app.route('/vote', methods= ['POST'])
 def vote():
+    logging.info(request.json)
     if request.method=='POST' and \
-    request.form.image_id and request.form.tag_strs:
-        for tag_str in request.form.tag_strs:
-            Tag.vote(db, ObjectId(request.form.image_id), tag_str)
+    'image_id' in request.json and 'tag_strs' in request.json:
+        for tag_str in request.json['tag_strs']:
+            Tag.vote(db, ObjectId(request.json['image_id']), tag_str)
+        return harsh_jsonify(\
+            Tag.user_image_id(db, ObjectId(request.json['image_id']))\
+        )
     return jsonify({})
     
 
