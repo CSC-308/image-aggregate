@@ -60,7 +60,9 @@ login_manager.session_protection = "strong"
 
 # MongoDB setup.
 logging.info("Connecting with %s", os.getenv('MONGO_DB_CONNECTION_STRING'))
-db_client = pymongo.MongoClient(os.getenv('MONGO_DB_CONNECTION_STRING'))
+db_client = pymongo.MongoClient(os.getenv('MONGO_DB_CONNECTION_STRING'),
+            tls=True,
+            tlsAllowInvalidCertificates=True)
 db = db_client.get_database('Image_Aggregate')
 
 # Flask-Login helper to retrieve a user from our db.
