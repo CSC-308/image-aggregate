@@ -57,7 +57,9 @@ login_manager.session_protection = "strong"
 
 # MongoDB setup.
 logging.info("Connecting with %s", os.getenv('MONGO_DB_CONNECTION_STRING'))
-db_client = pymongo.MongoClient(os.getenv('MONGO_DB_CONNECTION_STRING'))
+db_client = pymongo.MongoClient(os.getenv('MONGO_DB_CONNECTION_STRING'),
+            tls=True,
+            tlsAllowInvalidCertificates=True)
 db = db_client.get_database('Image_Aggregate')
 
 # Flask-Login helper to retrieve a user from our db.
@@ -103,7 +105,7 @@ def get_post(image_id):
 @app.route('/search/<tag_name>', methods=['GET'])
 def search_by_name(tag_name):
     return harsh_jsonify(\
-        Tag.user_tag_id(db, Tag.tag_name_id(tag_name), create_new=False)
+        Tag.user_tag_id(db, Tag.tag_name_id(db, tag_name, create_new=False))
     )
 
 @app.route('/vote', methods= ['POST'])
