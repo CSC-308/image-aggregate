@@ -14,7 +14,7 @@ function Images(props) {
   function handleAddImage() {
   }
 
-  function postFormat(url, collections, index, tags=[]) {
+  function postFormat(url, collections, index, tags=undefined) {
     return (
       <div className='Image'>
         <div className='ImageDiv'>

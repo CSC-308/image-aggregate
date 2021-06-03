@@ -17,7 +17,7 @@ function Search(props) {
     });
     props.updatePostResults([])
 
-    searchDatabase(query.split(' ')[0]);
+    searchDatabase(query.split(' '));
     searchWeb(query);
   }
 
