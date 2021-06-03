@@ -29,6 +29,8 @@ from api.user import User
 from api.collection import Collection
 from api.image import Image
 
+import api.tag as Tag
+
 # Flask app setup.
 # Learn more at: https://flask-session.readthedocs.io/en/latest/ (session).
 app = Flask(__name__)
@@ -102,13 +104,9 @@ def harsh_jsonify(post_object):
 
 @app.route('/post/<image_id>', methods=['GET'])
 def get_post(image_id):
-    query_object = {'_id': ObjectId(image_id)}
-    post = db.Images.find_one(query_object)
-    if post is not None:
-        logging.info(post)
-        return harsh_jsonify(post)
-    logging.info("Image_id: %s not found.", image_id)
-    return jsonify({})
+    return harsh_jsonify(\
+        Tag.user_image_id(db, ObjectId(image_id))
+    )
 
 @app.route('/posts', methods=['POST', 'OPTIONS'])
 def get_posts():
@@ -122,38 +120,24 @@ def get_posts():
 
     return resp
 
-@app.route('/search/<tag_name>')
+@app.route('/search/<tag_name>', methods=['GET'])
 def search_by_name(tag_name):
-    tag = db['Tags'].find_one({'name': tag_name})
-    if tag:
-        page = []
-        for image_id in tag['images described']:
-            page.append(db['Images'].find_one({'_id': image_id}))
-        logging.info(page)
-        return harsh_jsonify(page)
-    logging.info("Tag_name: %s not found.", tag_name)
-    return jsonify({})
+    return harsh_jsonify(\
+        Tag.user_tag_id(db, Tag.tag_name_id(db, tag_name, create_new=False))
+    )
 
-# increment votes by one.
-# test with /vote/606d2585618eb2fcae6391c1/606d2703618eb2fcae6391c2
-@app.route('/vote/<image_id>/<tag_id>')
-def vote(image_id, tag_id):
-    query = {'_id': ObjectId(image_id), 'tags._id': ObjectId(tag_id)}
-    newvals = {'$inc': {'tags.$.votes': 1}}
-    result = db.Images.update_one(query, newvals)
-    logging.info("updateResult {acknowledged: "+str(result.acknowledged)
-                +", modified_count: "+str(result.modified_count)+"}")
+@app.route('/vote', methods= ['POST'])
+def vote():
+    logging.info(request.json)
+    if request.method=='POST' and \
+    'image_id' in request.json and 'tag_strs' in request.json:
+        for tag_str in request.json['tag_strs']:
+            Tag.vote(db, ObjectId(request.json['image_id']), tag_str)
+        return harsh_jsonify(\
+            Tag.user_image_id(db, ObjectId(request.json['image_id']))\
+        )
     return jsonify({})
-
-# decrease votes by one. Test function, not permanent implementation (i hope)
-@app.route('/unvote/<image_id>/<tag_id>')
-def unvote(image_id, tag_id):
-    query = {'_id': ObjectId(image_id), 'tags._id': ObjectId(tag_id)}
-    newvals = {'$inc': {'tags.$.votes': -1}}
-    result = db.Images.update_one(query, newvals)
-    logging.info("updateResult {acknowledged: "+str(result.acknowledged)
-                +", modified_count: "+str(result.modified_count)+"}")
-    return jsonify({})
+    
 
 @app.route('/user/collections', methods=['GET', 'POST'])
 def get_current_user_collections():
