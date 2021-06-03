@@ -1,27 +1,30 @@
 class Collection():
 
-    def __init__(self, collection_id, name, description, creator, private):
-        self.id = collection_id
-        self.name = name
-        self.description = description
-        self.creator = creator
-        self.private = private
-        self.images = []
-
     @staticmethod
-    def create(db, name, description, creator, creator_id, private):
+    def create(db, collection, creator_id):
         query_object = {
-            'name': name,
-            'description': description,
-            'creator': creator,
-            'private': private,
+            'name': collection['name'],
+            'description': collection['description'],
+            'creator': collection['creator'],
+            'private': collection['private'],
             'images': []
         }
 
-        collection_id = db['Image Collections'].insert__one(query_object)
-        db.Users.update({'_id': creator_id.id}, {'$push': {'collections': collection_id}})
+        user = db['Users'].find_one({'_id': creator_id})
 
-        return 0
+        for collection_id in user.collections:
+            user_collection = db['Image Collections'].find_one({'_id': collection_id})
+            if collection['name'] == user_collection['name']:
+                return None
+
+        collection_id = db['Image Collections'].insert__one(query_object)
+        db['Users'].update({'_id': creator_id}, {'$push': {'collections': collection_id}})
+
+        return Collection.get(db, collection_id)
+
+    @staticmethod
+    def delete(db, collection_id):
+        return db['Image Collections'].delete_one({'_id': collection_id})
 
     @staticmethod
     def get(db, collection_id):
@@ -29,10 +32,8 @@ class Collection():
 
     @staticmethod
     def addImage(db, collection_id, img):
-        db['Image Collections'].update({'_id': collection_id}, {'$push': {'images': img.id}})
-        return 0
+        return db['Image Collections'].update({'_id': collection_id}, {'$push': {'images': img_id}})
 
     @staticmethod
     def removeImage(db, collection_id, img):
-        db['Image Collections'].update({'_id': collection_id}, {'$pull': {'images': img.id}})
-        return 0
+        return db['Image Collections'].update({'_id': collection_id}, {'$pull': {'images': img_id}})
