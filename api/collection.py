@@ -12,12 +12,12 @@ class Collection():
 
         user = db['Users'].find_one({'_id': creator_id})
 
-        for collection_id in user.collections:
+        for collection_id in user['collections']:
             user_collection = db['Image Collections'].find_one({'_id': collection_id})
             if collection['name'] == user_collection['name']:
                 return None
 
-        collection_id = db['Image Collections'].insert__one(query_object)
+        collection_id = db['Image Collections'].insert_one(query_object).inserted_id
         db['Users'].update({'_id': creator_id}, {'$push': {'collections': collection_id}})
 
         return Collection.get(db, collection_id)
