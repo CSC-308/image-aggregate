@@ -30,21 +30,31 @@ function Collections(props) {
     const name = collectionName.trim();
 
     if (isValidCollectionName(name)) {
-      // ToDo: This should be created in the backend instead
-      //
-      // createNewCollectionInBackend(name);
-      // props.updateSession();
-      //
-      // For now we'll just create a temporary one
-      const newCollection = {name: name, images: [], id: '0'};
-      setCollections([...collections, newCollection]);
-      setCollectionName('');
+      const newCollection = {
+        name: name,
+        description: '',
+        creator: `${props.session.first_name} ${props.session.last_name}`,
+        private: false
+      };
+
+      fetch(`${SERVER_URL}/user/collections`, {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(newCollection)
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.name) {
+            props.updateSession();
+          } else {
+            alert("Couldn't add collection");
+          }
+          setCollectionName('');
+        })
+        .catch(err => console.error(err));
     } else {
       alert('Invalid collection name');
     }
-  }
-
-  function deleteCollection(name) {
   }
 
   function handleCollectionNameChange(event) {
