@@ -137,7 +137,7 @@ def vote():
             Tag.user_image_id(db, ObjectId(request.json['image_id']))\
         )
     return jsonify({})
-    
+
 
 @app.route('/user/collections', methods=['GET', 'POST'])
 def get_current_user_collections():
@@ -155,7 +155,7 @@ def get_current_user_collections():
         logging.info("User: %s has no collections.", current_user.name)
         return jsonify({})
     elif request.method == 'POST':
-        collectionToAdd = json.loads(request.get_json())
+        collectionToAdd = request.get_json(force=True)
         newCollection = Collection.create(db, collectionToAdd, ObjectId(current_user.id))
 
         if newCollection is None:
@@ -164,6 +164,7 @@ def get_current_user_collections():
 
         logging.info(newCollection)
         return harsh_jsonify(newCollection), 201
+
 
 @app.route('/user/collections/<collection_id>', methods=['GET', 'DELETE'])
 def get_collection(collection_id):
