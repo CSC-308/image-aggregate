@@ -31,9 +31,9 @@ class Collection():
         return db['Image Collections'].find_one({'_id': collection_id})
 
     @staticmethod
-    def addImage(db, collection_id, img):
+    def add_image(db, collection_id, img_id):
         return db['Image Collections'].update({'_id': collection_id}, {'$push': {'images': img_id}})
 
     @staticmethod
-    def removeImage(db, collection_id, img):
+    def remove_image(db, collection_id, img_id):
         return db['Image Collections'].update({'_id': collection_id}, {'$pull': {'images': img_id}})
