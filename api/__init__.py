@@ -111,8 +111,11 @@ def get_post(image_id):
 def get_posts():
     if request.method == 'POST':
         image_ids = request.get_json()['image_ids']
+        images = Image.get_images(db, image_ids)
+        for image in images:
+            image['id'] = str(image['_id'])
 
-        return harsh_jsonify(Image.get_images(db, image_ids))
+        return harsh_jsonify(images)
 
     resp = make_response()
     resp.headers['Access-Control-Allow-Headers'] = 'content-type'
