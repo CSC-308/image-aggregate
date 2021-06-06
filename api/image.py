@@ -7,10 +7,12 @@ class Image():
             'tags': image['tags']
         }
 
-        if db['Images'].find_one({'url': image['image URL']}) is not None:
-            return None
+        result = db['Images'].find_one({'image URL': image['image URL']})
 
-        image_id = db['Images'].insert_one(query_object)
+        if result is not None:
+            return result
+
+        image_id = db['Images'].insert_one(query_object).inserted_id
         return Image.get(db, image_id)
 
     @staticmethod
