@@ -8,7 +8,9 @@ function Body(props) {
       <Images className='Images'
         searchResults={props.searchResults}
         postResults={props.postResults}
-        session={props.session}/>
+        session={props.session}
+        updateSession={props.updateSession}
+      />
     </div>
   );
 }
