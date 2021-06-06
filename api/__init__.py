@@ -1,5 +1,4 @@
 import json, requests, os, sys, logging
-from pymongo import collection
 
 import pymongo
 from pymongo import collection
@@ -194,44 +193,47 @@ def get_collection(collection_id):
 
 @app.route('/user/collections/<collection_id>/<img_id>', methods=['POST', 'DELETE'])
 def update_collection(collection_id, img_id):
-    collection = Collection.get(db, ObjectId(collection_id))
+    coll = Collection.get(db, ObjectId(collection_id))
 
-    if collection is None:
+    if coll is None:
         logging.info("Collection_id: %s not found in User: %s collections.",
                 str(collection_id), current_user.first_name)
-        return jsonify({}), 404
+        return jsonify({
+            'success': False,
+            'error': 'Invalid collection id'
+        })
 
-    for image_id in collection['images']:
-        if img_id.equals(image_id):
+    for image_id in coll['images']:
+        if img_id == str(image_id):
             if request.method == 'POST':
                 logging.info("Image_id: %s already exists in Collection_id: %s.",
                         str(img_id), str(collection_id))
-                return jsonify({}), 404
+                return jsonify({
+                    'success': False,
+                    'error': 'Image already exists in collection'
+                })
             elif request.method == 'DELETE':
-                updated_query = Collection.removeImage(db,
-                        ObjectId(collection_id), image_id)
+                updated_query = Collection.remove_image(db, ObjectId(collection_id), image_id)
                 logging.info(updated_query)
-                resp = jsonify(updated_query), 204
-                return resp
+                return jsonify({ 'success': True })
 
     if request.method == 'POST':
-        updated_query = Collection.addImage(db, ObjectId(collection_id), ObjectId(img_id))
+        updated_query = Collection.add_image(db, ObjectId(collection_id), ObjectId(img_id))
         logging.info(updated_query)
-        resp = jsonify(updated_query), 201
-        return resp
+        return jsonify({ 'success': True })
     elif request.method == 'DELETE':
         logging.info("Image_id: %s does not exist in Collection_id: %s.",
                 str(img_id), str(collection_id))
-        return jsonify({}), 404
+        return jsonify({
+            'success': False,
+            'error': 'Image not found in collection'
+        })
 
 @app.route('/images', methods=['POST'])
 def add_image():
-    image_to_add = json.loads(request.get_json())
+    image_to_add = request.get_json(force=True)
     new_image = Image.create(db, image_to_add)
-
-    if new_image is None:
-        logging.info("Image: %s already exists in database.", image_to_add['name'])
-        return jsonify({}), 404
+    new_image['id'] = str(new_image['_id'])
 
     logging.info(new_image)
-    return harsh_jsonify(new_image), 201
+    return harsh_jsonify(new_image)
