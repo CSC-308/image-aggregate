@@ -60,6 +60,7 @@ function MyApp() {
               key={collection['_id']['$oid']}
               exact path={`/collections/${collection.name}`}>
               <Collection
+                session={session}
                 updateSession={fetchSession}
                 name={collection.name}
                 images={collection.images.map(image => image['$oid'])}
