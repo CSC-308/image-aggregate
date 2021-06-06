@@ -61,6 +61,22 @@ function Collections(props) {
     setCollectionName(event.target.value);
   }
 
+  function deleteCollection(id) {
+    fetch(`${SERVER_URL}/user/collections/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          props.updateSession();
+        } else {
+          alert("Couldn't delete collection");
+        }
+      })
+      .catch(err => console.error(err));
+  }
+
   return (
     <div className='Collections'>
       <form>
@@ -82,6 +98,12 @@ function Collections(props) {
               {collection.name}
             </button>
           </Link>
+          <button
+            id={collection.id}
+            className='CollectionDeleteButton'
+            onClick={() => deleteCollection(collection.id)}>
+            Delete
+          </button>
         </div>
       )}
     </div>
