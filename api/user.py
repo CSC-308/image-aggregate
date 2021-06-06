@@ -40,3 +40,7 @@ class User(UserMixin):
             return User.get(db, user['_id'])
 
         return None
+
+    @staticmethod
+    def remove_collection(db, user_id, collection_id):
+        db['Users'].update({'_id': ObjectId(user_id)}, {'$pull': {'collections': ObjectId(collection_id)}})

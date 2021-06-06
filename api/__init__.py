@@ -146,14 +146,16 @@ def get_current_user_collections():
         output = []
 
         for collectionID in user['collections']:
-            output.append(Collection.get(db, collectionID))
+            coll = Collection.get(db, collectionID)
+            coll['id'] = str(coll['_id'])
+            output.append(coll)
 
         if len(output) > 0:
             logging.info(output)
             return harsh_jsonify(output)
 
-        logging.info("User: %s has no collections.", current_user.name)
-        return jsonify({})
+        logging.info("User: %s has no collections.", current_user.first_name)
+        return jsonify([])
     elif request.method == 'POST':
         collectionToAdd = request.get_json(force=True)
         newCollection = Collection.create(db, collectionToAdd, ObjectId(current_user.id))
@@ -180,15 +182,15 @@ def get_collection(collection_id):
         return jsonify({}), 404
     elif request.method == 'DELETE':
         deleted_query = Collection.delete(db, ObjectId(collection_id))
+        logging.info(deleted_query)
 
         if deleted_query.acknowledged is True:
-            logging.info(deleted_query)
-            resp = jsonify(deleted_query.deleted_count), 204
-            return resp
+            User.remove_collection(db, current_user.id, collection_id)
+            return jsonify({ 'success': True })
 
         logging.info("Collection_id: %s not found in User: %s collections.",
                 str(collection_id), current_user.first_name)
-        return jsonify({}), 404
+        return jsonify({ 'success': False })
 
 @app.route('/user/collections/<collection_id>/<img_id>', methods=['POST', 'DELETE'])
 def update_collection(collection_id, img_id):
