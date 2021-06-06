@@ -1,63 +1,28 @@
 import React, { useState } from 'react'
 import './Images.css'
+import Image from './Image'
 import Tags from './Tags'
 import Collection from './Collection'
 import Collections from './Collections'
 
 function Images(props) {
-  const [open, setOpen] = useState(false);
-
-  function handleDropdown() {
-    setOpen(!open);
-  }
-
-  function handleAddImage() {
-  }
-
-  function postFormat(url, collections, index, tags=[]) {
-    return (
-      <div className='Image'>
-        <div className='ImageDiv'>
-          <img src={url} alt={`image ${index}`} />
-        </div>
-        <div className='AddToCollectionDiv'>
-          <button
-            type="button"
-            className="AddImage"
-            onClick={handleDropdown}>
-            +
-          </button>
-          {open && (
-            <div className="Dropdown">
-              {collections?.map(collection =>
-                <button
-                  key={collection.name}
-                  type="button"
-                  onClick={handleAddImage}>
-                    {collection.name}
-                </button>
-              ) || <p>No collections</p>}
-            </div>
-          )}
-        </div>
-        <div className='TagsDiv'>
-          <Tags
-            className='Tags'
-            tagNames={props.searchResults?.tagNames}
-            postData={tags}
-            url={url} />
-        </div>
-      </div>
-    );
-  }
-
   const images = props.searchResults?.images?.map((image, index) => {
     const collections = props.session?.collections;
 
     if (image.pagemap?.cse_image) {
       const url = image.pagemap?.cse_image[0]?.src;
 
-      return postFormat(url, collections, index);
+      return (
+        <Image
+          session={props.session}
+          updateSession={props.updateSession}
+          url={url}
+          collections={collections}
+          tagNames={props.searchResults.tagNames}
+          tags={[]}
+          index={index}
+        />
+      );
     } else {
       return (
         <div className="Image"></div>
@@ -71,7 +36,17 @@ function Images(props) {
     if (post['image URL']) {
       const url = post['image URL'];
 
-      return postFormat(url, collections, index, post.tags);
+      return (
+        <Image
+          session={props.session}
+          updateSession={props.updateSession}
+          url={url}
+          collections={collections}
+          tagNames={props.searchResults.tagNames}
+          tags={post.tags}
+          index={index}
+        />
+      );
     } else {
       return (
         <div className="Image"></div>

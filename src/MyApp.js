@@ -71,7 +71,12 @@ function MyApp() {
             <Login />
           </Route>
           <Route exact path='/'>
-            <Body searchResults={searchResults} postResults={postResults} />
+            <Body
+              searchResults={searchResults}
+              postResults={postResults}
+              session={session}
+              updateSession={fetchSession}
+            />
           </Route>
         </Switch>
         <Footer />
