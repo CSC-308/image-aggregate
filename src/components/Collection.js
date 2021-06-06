@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react'
+import CollectionImage from './CollectionImage'
+import './Collection.css'
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -23,30 +25,32 @@ function Collection(props) {
       .catch(err => console.error(err));
   }
 
-  function removeImage(imageToRemove) {
-    // ToDo: This must be reflected in the backend
-    //
-    // removeImageFromCollectionInBackend(imageToRemove);
-    // props.updateSession();
-    //
-    setImages(images.filter(image => image['image URL'] !== imageToRemove['image URL']));
-  }
-
-  function addImage(newImage) {
-    // ToDo: This must be reflected in the backend
-    //
-    // addImageToCollectionInBackend(newImage);
-    // props.updateSession();
-    //
-    setImages([...images, newImage]);
+  function removeImage(imageId) {
+    fetch(`${SERVER_URL}/user/collections/${id}/${imageId}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          props.updateSession();
+        } else {
+          alert(result.error);
+        }
+      })
+      .catch(err => console.error(err));
   }
 
   return (
     <div className='Collection'>
       {images.map((image, index) =>
-        <div key={image['image URL']} className='CollectionImage'>
-          <img src={image['image URL']} alt={`image ${index}`} />
-        </div>
+        <CollectionImage
+          key={image['image URL']}
+          url={image['image URL']}
+          alt={`image ${index}`}
+          imageId={image['id']}
+          removeImage={removeImage}
+        />
       )}
     </div>
   )
