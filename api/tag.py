@@ -22,6 +22,10 @@ def tag_name_id(db, tag_str, create_new=True):
         new_tag = {'name': tag_str, 'images described': []}
         return db.Tags.insert_one(new_tag)
 
+def tag_id_name(db, tag_id):
+    if (tag := db.Tags.find_one({'_id': tag_id})):
+        return tag['name']
+
 # add a tag to an image
 def image_tag(db, image_id, tag_str):
     tquery = {'name': tag_str}
@@ -37,4 +41,13 @@ def user_image_id(db, image_id):
     return db.Images.find_one({'_id': image_id}, {'user_cat': 0})
 
 def user_tag_id(db, tag_id):
-    return db.Images.find({'tags._id': tag_id}, {'user_cat': 0})
+    raw = db.Images.find({'tags._id': tag_id}, {'user_cat': 0})
+    postData = {'_id': '', 'image_URL': '', 'tags' : []}
+    for post in raw:
+        postData['_id']=str(post['_id'])
+        postData['image_URL'] = post['image URL']
+        for tag in post['tags']:
+            postData['tags'].append(\
+                {'name': tag_id_name(db, ObjectId(tag['_id'])),
+                'votes': tag['votes']})
+    return postData
