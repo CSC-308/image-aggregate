@@ -33,8 +33,8 @@ function Images(props) {
   const posts = props.postResults?.map((post, index) => {
     const collections = props.session?.collections;
 
-    if (post['image URL']) {
-      const url = post['image URL'];
+    if (post.image_URL) {
+      const url = post.image_URL;
 
       return (
         <Image
