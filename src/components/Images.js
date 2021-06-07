@@ -42,7 +42,7 @@ function Images(props) {
           updateSession={props.updateSession}
           url={url}
           collections={collections}
-          tagNames={props.searchResults.tagNames}
+          tagNames={post.tags.map((tag) => tag.name)}
           tags={post.tags}
           index={index}
         />
