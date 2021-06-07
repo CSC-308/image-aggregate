@@ -30,25 +30,51 @@ function Collections(props) {
     const name = collectionName.trim();
 
     if (isValidCollectionName(name)) {
-      // ToDo: This should be created in the backend instead
-      //
-      // createNewCollectionInBackend(name);
-      // props.updateSession();
-      //
-      // For now we'll just create a temporary one
-      const newCollection = {name: name, images: [], id: '0'};
-      setCollections([...collections, newCollection]);
-      setCollectionName('');
+      const newCollection = {
+        name: name,
+        description: '',
+        creator: `${props.session.first_name} ${props.session.last_name}`,
+        private: false
+      };
+
+      fetch(`${SERVER_URL}/user/collections`, {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(newCollection)
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.name) {
+            props.updateSession();
+          } else {
+            alert("Couldn't add collection");
+          }
+          setCollectionName('');
+        })
+        .catch(err => console.error(err));
     } else {
       alert('Invalid collection name');
     }
   }
 
-  function deleteCollection(name) {
-  }
-
   function handleCollectionNameChange(event) {
     setCollectionName(event.target.value);
+  }
+
+  function deleteCollection(id) {
+    fetch(`${SERVER_URL}/user/collections/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          props.updateSession();
+        } else {
+          alert("Couldn't delete collection");
+        }
+      })
+      .catch(err => console.error(err));
   }
 
   return (
@@ -72,6 +98,12 @@ function Collections(props) {
               {collection.name}
             </button>
           </Link>
+          <button
+            id={collection.id}
+            className='CollectionDeleteButton'
+            onClick={() => deleteCollection(collection.id)}>
+            Delete
+          </button>
         </div>
       )}
     </div>
