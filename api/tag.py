@@ -42,12 +42,14 @@ def user_image_id(db, image_id):
 
 def user_tag_id(db, tag_id):
     raw = db.Images.find({'tags._id': tag_id}, {'user_cat': 0})
-    postData = {'_id': '', 'image_URL': '', 'tags' : []}
-    for post in raw:
-        postData['_id']=str(post['_id'])
-        postData['image_URL'] = post['image URL']
-        for tag in post['tags']:
-            postData['tags'].append(\
+    postData = []
+    for raw_post in raw:
+        post = {'_id': '', 'image_URL': '', 'tags' : []}
+        post['_id']=str(raw_post['_id'])
+        post['image_URL'] = raw_post['image URL']
+        for tag in raw_post['tags']:
+            post['tags'].append(\
                 {'name': tag_id_name(db, ObjectId(tag['_id'])),
                 'votes': tag['votes']})
+        postData.append(post)
     return postData
