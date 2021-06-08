@@ -84,6 +84,7 @@ function Image(props) {
           className='Tags'
           tagNames={props.tagNames}
           postData={props.tags}
+          imageId={props.imageId}
           url={props.url} />
       </div>
     </div>

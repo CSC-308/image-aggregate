@@ -20,6 +20,7 @@ function Images(props) {
           collections={collections}
           tagNames={props.searchResults.tagNames}
           tags={[]}
+          imageId={''}
           index={index}
         />
       );
@@ -35,7 +36,6 @@ function Images(props) {
 
     if (post.image_URL) {
       const url = post.image_URL;
-
       return (
         <Image
           session={props.session}
@@ -44,6 +44,7 @@ function Images(props) {
           collections={collections}
           tagNames={post.tags.map((tag) => tag.name)}
           tags={post.tags}
+          imageId={post._id}
           index={index}
         />
       );
