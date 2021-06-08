@@ -43,15 +43,21 @@ function Collection(props) {
 
   return (
     <div className='Collection'>
-      {images.map((image, index) =>
-        <CollectionImage
-          key={image['image URL']}
-          url={image['image URL']}
-          alt={`image ${index}`}
-          imageId={image['id']}
-          removeImage={removeImage}
-        />
-      )}
+      <div className='CollectionTitle'>
+        <h1>{props.name}</h1>
+        <p>Number of Images: {images.length}</p>
+      </div>
+      <div className='CollectionImages'>
+        {images.map((image, index) =>
+          <CollectionImage
+            key={image['image URL']}
+            url={image['image URL']}
+            alt={`image ${index}`}
+            imageId={image['id']}
+            removeImage={removeImage}
+          />
+        )}
+      </div>
     </div>
   )
 }

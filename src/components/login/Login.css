@@ -6,7 +6,6 @@
 }
 
 .Login {
-  /*background-image: url("./../../login-background2.jpg");*/
   background-image: url("./../../login-background.png");
   background-size: cover;
   min-height: 92vh;

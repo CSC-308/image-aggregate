@@ -1,6 +1,68 @@
 .Collections {
+  background-image: url(./../collections-page-background2.png);
+  background-size: cover;
+  min-height: 89.75vh;
+}
+
+.Collections h1{
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+.Collections form {
+  display: flex;
+  justify-content: center;
+}
+
+.NewCollectionButton {
+  background-color: lightblue;
+  border: none;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  transition-duration: 0.4s;
+}
+
+.NewCollectionButton:hover {
+  background-color: white;
+  color: rgb(79, 190, 228);
+  border: 10px;
+}
+
+.CenterCollectionNameDiv {
+  margin-top: 85px;
+}
+
+.CollectionNameDiv {
+  width: 225px;
+  height: 225px;
+  background-color: rgb(155, 233, 247);
+  border-radius: 50%;
+  float: left;
+  margin: 25px 25px 25px 25px;
+}
+
+.CollectionNameDiv button {
+  background: none;
+  border: none;
+  display: block;
+  color: white;
+  margin: 0px auto;
+  transition-duration: 0.4s;
+}
+
+.CollectionNameDiv button:hover {
+  transform: scale(1.25);
+}
+
+.CollectionNameButton {
+  font-size: 32px;
+  font-family: 'Brush Script MT', cursive;
+}
+
+.CollectionDeleteButton {
+  font-size: 16px;
 }
