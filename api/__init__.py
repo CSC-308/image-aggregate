@@ -132,9 +132,9 @@ def search_by_name(tag_name):
 def vote():
     logging.info(request.json)
     if request.method=='POST' and \
-    'image_id' in request.json and 'tag_strs' in request.json:
+    'image_id' in request.json and 'tag_strs' in request.json and 'inc' in request.json:
         for tag_str in request.json['tag_strs']:
-            Tag.vote(db, ObjectId(request.json['image_id']), tag_str)
+            Tag.vote(db, ObjectId(request.json['image_id']), tag_str, request.json['inc'])
         return harsh_jsonify({\
             'success': True,
             'new_object': Tag.user_image_id(db, ObjectId(request.json['image_id']))\

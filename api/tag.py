@@ -6,10 +6,10 @@ logger = logging.getLogger()
 logging.basicConfig(level=logging.DEBUG)
 
 # queries a tag name, tries to vote by id, creates a tag if necessary
-def vote(db, image_id, tag_str):
+def vote(db, image_id, tag_str, inc=1):
     tag_id = tag_name_id(db, tag_str)
     query = {'_id': ObjectId(image_id), 'tags._id': ObjectId(tag_id)}
-    newvals = {'$inc': {'tags.$.votes': 1}}
+    newvals = {'$inc': {'tags.$.votes': inc}}
     result = db.Images.update_one(query, newvals)
     if not result.modified_count and db.Images.find_one({'_id': image_id}):
         image_tag(db, image_id, tag_str)
@@ -21,7 +21,7 @@ def tag_name_id(db, tag_str, create_new=True):
         return tag['_id']
     if create_new:
         new_tag = {'name': tag_str, 'images described': []}
-        return db.Tags.insert_one(new_tag)
+        return db.Tags.insert_one(new_tag).inserted_id
 
 def tag_id_name(db, tag_id):
     tag = db.Tags.find_one({'_id': tag_id})
@@ -32,7 +32,8 @@ def tag_id_name(db, tag_id):
 def image_tag(db, image_id, tag_str):
     tquery = {'name': tag_str}
     push = {'$push':{'images described': image_id}}
-    tag_id = db.Tags.update_one(tquery, push)._id
+    db.Tags.update_one(tquery, push)
+    tag_id = tag_name_id(db, tag_str, create_new=False)
     if (tag_id):
         query = {'_id': image_id}
         pushvals = {'$push': {'tags': {'_id': tag_id, 'votes': 1} }}
