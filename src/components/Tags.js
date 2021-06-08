@@ -7,11 +7,18 @@ function Tags(props) {
   const [open, setOpen] = useState(false);
   const [tagName, setTagName] = useState('');
   const [tags, setTags] = useState(
+    props.postData===[] ?
     [ ...new Set(props.tagNames)].map((tagName, i) =>
     <Tag key={tagName} className='Tag' name={tagName}
-      score={props.postData[i] ? props.postData[i].votes : 0}
+      score={0}
       imageId={props.imageId}/>
-  ));
+    ) :
+    [ ...new Set(props.postData)].map((tag, i) =>
+    <Tag key={tag.name} className='Tag' name={tag.name}
+      score={tag.votes}
+      imageId={props.imageId}/>
+    )
+  );
 
   function handleDropdown() {
     setOpen(!open);
