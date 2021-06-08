@@ -135,10 +135,11 @@ def vote():
     'image_id' in request.json and 'tag_strs' in request.json:
         for tag_str in request.json['tag_strs']:
             Tag.vote(db, ObjectId(request.json['image_id']), tag_str)
-        return harsh_jsonify(\
-            Tag.user_image_id(db, ObjectId(request.json['image_id']))\
-        )
-    return jsonify({})
+        return harsh_jsonify({\
+            'success': True,
+            'new_object': Tag.user_image_id(db, ObjectId(request.json['image_id']))\
+        })
+    return jsonify({'success': True})
 
 
 @app.route('/user/collections', methods=['GET', 'POST'])
