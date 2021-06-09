@@ -52,3 +52,11 @@ def test_vote_pushing():
     extra_tag_id = Tag.tag_name_id(db, "extra")
     assert(extra_tag_id)
     assert(len(db['Tags'].find_one({'name': "extra"})['images described'])==2)
+
+def test_user_image_id():
+    db = mock_db()
+    assert(Tag.user_image_id(db, db['Images'].find_one()['_id'])!=None)
+
+def test_user_tag_id():
+    db = mock_db()
+    assert(Tag.user_tag_id(db, db['Tags'].find_one()['_id'])!=None)
