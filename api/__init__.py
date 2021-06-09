@@ -90,6 +90,16 @@ def get_current_user():
 
     return jsonify({})
 
+@app.route("/test/user/login")
+def login_test_user():
+    user = User.find(db, "test@user.com")
+    if not user:
+        user = User.create(db, "test", None, "test@user.com", "password")
+
+    login_user(user)
+
+    return redirect(os.getenv('LOGIN_REDIRECT'))
+
 @login_required
 @app.route("/logout")
 def logout():
