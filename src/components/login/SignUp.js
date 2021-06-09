@@ -42,33 +42,33 @@ function SignUp(props) {
   return (
     <div className="SignUp">
       <form onSubmit={handleSubmit}>
-        <label>
-          <p>Email</p>
+        <label className="InputText">
           <input
             type="email"
             onChange={(event) => setEmail(event.target.value)}
           />
+          <div className='Placeholder'>Email</div>
         </label>
-        <label>
-          <p>Username</p>
+        <label className="InputText">
           <input
             type="text"
             onChange={(event) => setUsername(event.target.value)}
           />
+          <div className='Placeholder'>Username</div>
         </label>
-        <label>
-          <p>Password</p>
+        <label className="InputText">
           <input
             type="password"
             onChange={(event) => setPassword(event.target.value)}
           />
+          <div className='Placeholder'>Password</div>
         </label>
-        <label>
-          <p>Verify Password</p>
+        <label className="InputText">
           <input
             type="password"
             onChange={(event) => setPasswordVerify(event.target.value)}
           />
+          <div className='Placeholder'>Verify Password</div>
         </label>
         <div className='SubmitButton'>
           <button type="submit">Sign Up</button>
