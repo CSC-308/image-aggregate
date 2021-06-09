@@ -2,24 +2,44 @@
 
 All client code exists in the master-client branch. The master-client branch is
 also the branch the CI/CD server points to for production. Any and all changes
-pushed will be reflected within the Heroku app.
+that pass the CI build tests will be reflected within the Heroku app.
 
 https://image-aggregate-client.herokuapp.com
 
-To deploy the app locally, you should just have to run "npm install" and "npm
-start".
+To deploy the app locally, make sure the .env file's environment variables are
+correct for your current setup and you should just have to run:
+
+ npm install
+ npm start
 
 We use ESLint to monitor our code quality and style.
 
 Installation and use: https://eslint.org/docs/user-guide/getting-started
 
-~~~ Python ~~~
+~~~ Server ~~~
+
+All server code exists in the master-server branch. The master-server branch is
+also the branch the CI/CD server points to for production. Any and all changes
+that pass the CI build tests will be reflected within the Heroku app.
+
+https://image-aggregate-server.herokuapp.com/
+
+To deploy the server locally, make sure the .env file's environment variables
+are correct for your current setup and then run:
+
+ export FLASK_APP=api
+ export FLASK_ENV=development|production
+ pip install setuptools
+ pip install -e .
+ flask run --cert=cert.pem --key=key.pem
 
 We use Pylint to monitor our code quality and style.
 
 Installation: pip install pylint
 
 Use: http://pylint.pycqa.org/en/latest/user_guide/run.html
+
+~~~ Linting Practices ~~~
 
 Pylint or ESLint with their default configuration (standard style guide) must be ran (automatically or
 manually) on every file created and or edited by a developer.
