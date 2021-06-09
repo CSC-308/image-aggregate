@@ -2,57 +2,101 @@ import React, {useState} from 'react'
 
 function SignUp(props) {
   const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
+  const [firstName, setUserFirstName] = useState('');
+  const [lastName, setUserLastName] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVerify, setPasswordVerify] = useState('');
-  const [error, setError] = useState('');
+
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   function handleSubmit(event) {
     event.preventDefault();
 
     if (formIsValid()) {
-      setError('');
+      createUser();
+      window.location=process.env.REACT_APP_CLIENT_URL;
+      alert('Account creation successful')
     }
   }
 
   function formIsValid() {
     if (email.length < 1) {
-      setError('Must enter an email.');
+      alert('Must enter an email.');
       return false;
     }
 
-    if (username.length < 1) {
-      setError('Must enter a username.');
+    if (firstName.length < 1) {
+      alert('Must enter first name.');
+      return false;
+    }
+
+    if (lastName.length < 1) {
+      alert('Must enter last name.');
       return false;
     }
 
     if (password !== passwordVerify) {
-      setError('Passwords do not match.');
+      alert('Passwords do not match.');
       return false;
     }
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters long.');
+      alert('Password must be at least 8 characters long.');
       return false;
     }
 
     return true;
   }
 
+  function createUser() {
+    if (formIsValid) {
+      const newUser = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password
+      };
+
+      fetch(`${SERVER_URL}/users/new`, {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(newUser)
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.name) {
+            props.updateSession();
+          } else {
+            alert("Unable to create user: User already exists");
+          }
+        })
+        .catch(err => console.error(err));
+    }
+  }
+
   return (
     <div className="SignUp">
       <form onSubmit={handleSubmit}>
-        <label className="InputText">
+        <label>
+          <p>First Name</p>
           <input
-            type="email"
-            onChange={(event) => setEmail(event.target.value)}
+            type="text"
+            onChange={(event) => setUserFirstName(event.target.value)}
           />
           <div className='Placeholder'>Email</div>
         </label>
-        <label className="InputText">
+        <label>
+          <p>Last Name</p>
           <input
             type="text"
-            onChange={(event) => setUsername(event.target.value)}
+            onChange={(event) => setUserLastName(event.target.value)}
+          />
+        </label>
+        <label>
+          <p>Email</p>
+          <input
+            type="email"
+            onChange={(event) => setEmail(event.target.value)}
           />
           <div className='Placeholder'>Username</div>
         </label>
@@ -71,10 +115,8 @@ function SignUp(props) {
           <div className='Placeholder'>Verify Password</div>
         </label>
         <div className='SubmitButton'>
-          <button type="submit">Sign Up</button>
-        </div>
-        <div className='ErrorText'>
-          {error}
+          <button type="submit">
+          Sign Up</button>
         </div>
       </form>
     </div>
