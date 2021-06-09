@@ -79,6 +79,7 @@ function Collections(props) {
 
   return (
     <div className='Collections'>
+      <h1>My Collections</h1>
       <form>
         <input className='NewCollectionTextBox'
           type='text'
@@ -93,17 +94,19 @@ function Collections(props) {
       </form>
       {collections.map(collection =>
         <div key={collection.id} className='CollectionNameDiv'>
-          <Link to={`/collections/${collection.name}`}>
-            <button className='CollectionNameButton'>
-              {collection.name}
+          <div className='CenterCollectionNameDiv'>
+            <Link to={`/collections/${collection.name}`}>
+              <button className='CollectionNameButton'>
+                {collection.name}
+              </button>
+            </Link>
+            <button
+              id={collection.id}
+              className='CollectionDeleteButton'
+              onClick={() => deleteCollection(collection.id)}>
+              Delete
             </button>
-          </Link>
-          <button
-            id={collection.id}
-            className='CollectionDeleteButton'
-            onClick={() => deleteCollection(collection.id)}>
-            Delete
-          </button>
+          </div>
         </div>
       )}
     </div>

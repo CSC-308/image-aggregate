@@ -19,7 +19,8 @@ function Images(props) {
           url={url}
           collections={collections}
           tagNames={props.searchResults.tagNames}
-          tags={[]}
+          tags={null}
+          imageId={''}
           index={index}
         />
       );
@@ -33,17 +34,17 @@ function Images(props) {
   const posts = props.postResults?.map((post, index) => {
     const collections = props.session?.collections;
 
-    if (post['image URL']) {
-      const url = post['image URL'];
-
+    if (post.image_URL) {
+      const url = post.image_URL;
       return (
         <Image
           session={props.session}
           updateSession={props.updateSession}
           url={url}
           collections={collections}
-          tagNames={props.searchResults.tagNames}
+          tagNames={post.tags.map((tag) => tag.name)}
           tags={post.tags}
+          imageId={post._id}
           index={index}
         />
       );

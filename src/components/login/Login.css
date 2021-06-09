@@ -4,3 +4,81 @@
   align-items: center;
   flex-direction: column;
 }
+
+.Login {
+  background-image: url("./../../login-background.png");
+  background-size: cover;
+  min-height: 92vh;
+}
+
+.LoginForm {
+  width: calc(100% - 20px);
+  max-width: 500px;
+  background-color: white;
+  padding: 40px 10px;
+  border-radius: 50px;
+}
+
+.LoginForm h1 {
+  text-align: center;
+  color: lightblue;
+  font-size: 48px;
+}
+
+.GoogleOption, .LoginOptions {
+  text-align: center;
+  padding: 5px;
+}
+
+.SignInButton, .SignUpButton {
+  margin: 0px 8px 10px 8px;
+}
+
+.Login button {
+  background-color: lightblue;
+  border: none;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  transition-duration: 0.4s;
+}
+
+.Login button:hover {
+  background-color: white;
+  color: rgb(79, 190, 228);
+  border: 10px;
+}
+
+.InputText {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.Login input {
+  width: 100%;
+  height: 70px;
+  border: none;
+  background-color: lightgrey;
+  border-radius: 4px;
+  color: black;
+  font-size: 18px;
+  padding: 10px 0px 0px 10px;
+}
+
+.Placeholder {
+  font-size: 14px;
+  position: absolute;
+  line-height: 70px;
+  top: 0px;
+  left: 20px;
+  color: grey;
+  user-select: none;
+  pointer-events: none;
+}
+
+.InputText input:focus ~ .Placeholder,
+.InputText input:valid ~ .Placeholder {
+  left: 10px;
+  top: -16px;
+}

@@ -15,7 +15,7 @@ function CollectionImage(props) {
 
   return (
     <div key={props.url} className='CollectionImage'>
-      <img src={props.url} alt={props.alt} />
+      <a target='_blank' rel="noopener noreferrer" href={props.url}><img src={props.url} alt={props.alt} /></a>
       <button className='DropdownButton' onClick={handleDropdown}>
         -
       </button>

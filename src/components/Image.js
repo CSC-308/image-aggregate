@@ -82,8 +82,11 @@ function Image(props) {
       <div className='TagsDiv'>
         <Tags
           className='Tags'
-          tagNames={props.tagNames}
+          tagNames={props.tagNames.map(tagName => {
+            return { name: tagName, votes: 0 };
+          })}
           postData={props.tags}
+          imageId={props.imageId}
           url={props.url} />
       </div>
     </div>
