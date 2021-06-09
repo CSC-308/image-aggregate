@@ -13,9 +13,6 @@ function Tag(props) {
     fetch(SERVER_URL + '/vote', {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify({ image_id: imageId, tag_strs: [name],
         inc: voted ? -1 : 1})
     })

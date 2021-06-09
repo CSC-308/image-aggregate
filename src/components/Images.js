@@ -19,7 +19,7 @@ function Images(props) {
           url={url}
           collections={collections}
           tagNames={props.searchResults.tagNames}
-          tags={[]}
+          tags={null}
           imageId={''}
           index={index}
         />

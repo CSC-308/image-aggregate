@@ -7,17 +7,13 @@ function Tags(props) {
   const [open, setOpen] = useState(false);
   const [tagName, setTagName] = useState('');
   const [tags, setTags] = useState(
-    props.postData===[] ?
-    [ ...new Set(props.tagNames)].map((tagName, i) =>
-    <Tag key={tagName} className='Tag' name={tagName}
-      score={0}
-      imageId={props.imageId}/>
-    ) :
-    [ ...new Set(props.postData)].map((tag, i) =>
-    <Tag key={tag.name} className='Tag' name={tag.name}
-      score={tag.votes}
-      imageId={props.imageId}/>
-    )
+    [ ...new Set(props.postData || props.tagNames)].map((tag, i) => {
+      return (
+        <Tag key={`${tag.name} ${i} ${props.imageId}`} className='Tag' name={tag.name}
+          score={tag.votes}
+          imageId={props.imageId}/>
+      );
+    })
   );
 
   function handleDropdown() {
@@ -25,7 +21,6 @@ function Tags(props) {
   }
 
   function handleChange(event) {
-    console.log("aaaa")
     setTagName(event.target.value);
   }
 
@@ -37,9 +32,6 @@ function Tags(props) {
       fetch(SERVER_URL + '/vote', {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ image_id: props.imageId, tag_strs: [tagName],
           inc: 1})
       })
@@ -80,7 +72,7 @@ function Tags(props) {
         )}
       </div>
     </div>
-    
+
 
   )
 }

@@ -11,7 +11,7 @@
   margin-left: 6px;
   border: solid 1px black;
   width: 10vw;
-  max-width: 40px;
+  max-width: 60px;
   background-color: aliceblue;
   border-radius: 10px;
 }
@@ -25,7 +25,7 @@
 .UserDiv p {
   position: relative;
   left: 2%;
-  color: white;
+  color: black;
 }
 
 .LoginButton {
