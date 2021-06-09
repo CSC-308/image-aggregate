@@ -1,4 +1,13 @@
-~~~ Javascript ~~~
+~~~ Client ~~~
+
+All client code exists in the master-client branch. The master-client branch is
+also the branch the CI/CD server points to for production. Any and all changes
+pushed will be reflected within the Heroku app.
+
+https://image-aggregate-client.herokuapp.com
+
+To deploy the app locally, you should just have to run "npm install" and "npm
+start".
 
 We use ESLint to monitor our code quality and style.
 
