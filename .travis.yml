@@ -7,4 +7,4 @@ install:
   - pip install setuptools -e .
 
 script:
-  - pytest
+  - python -m pytest
