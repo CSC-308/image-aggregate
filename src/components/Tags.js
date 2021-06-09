@@ -56,7 +56,7 @@ function Tags(props) {
       <div className='AddToCollectionDiv'>
         <button
           type="button"
-          className="AddImage"
+          className="AddTag"
           onClick={handleDropdown}>
           +
         </button>
