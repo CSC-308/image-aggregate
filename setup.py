@@ -14,5 +14,6 @@ setup(
         'gunicorn',
         'pymongo',
         'dnspython',
+        'mongomock',
     ],
 )
