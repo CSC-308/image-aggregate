@@ -10,20 +10,23 @@ function Login(props) {
 
   return (
     <div className='Login'>
-      <div className='GoogleOption'>
-        <GoogleLoginButton />
+      <div className='LoginForm'>
+        <h1>Log In</h1>
+        <div className='GoogleOption'>
+          <GoogleLoginButton />
+        </div>
+        <div className='LoginOptions'>
+          <button className='SignInButton'
+          onClick={() => setShowSignUp(false)}>
+            {'Sign In'}
+          </button>
+          <button className='SignUpButton'
+          onClick={() => setShowSignUp(true)}>
+            {'Sign Up'}
+          </button>
+        </div>
+        {showSignUp ? <SignUp /> : <SignIn />}
       </div>
-      <div className='LoginOptions'>
-        <button className='SignInButton'
-        onClick={() => setShowSignUp(false)}>
-          {'Sign In'}
-        </button>
-        <button className='SignUpButton'
-        onClick={() => setShowSignUp(true)}>
-          {'Sign Up'}
-        </button>
-      </div>
-      {showSignUp ? <SignUp /> : <SignIn />}
     </div>
   )
 }

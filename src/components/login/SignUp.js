@@ -48,31 +48,31 @@ function SignUp(props) {
     return true;
   }
 
-  // function createUser() {
-  //   if (formIsValid) {
-  //     const newUser = {
-  //       firstName: firstName,
-  //       lastName: lastName,
-  //       email: email,
-  //       password: password
-  //     };
+  function createUser() {
+    if (formIsValid) {
+      const newUser = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password
+      };
 
-  //     fetch(`${SERVER_URL}/users/new`, {
-  //       method: 'POST',
-  //       credentials: 'include',
-  //       body: JSON.stringify(newUser)
-  //     })
-  //       .then(response => response.json())
-  //       .then(result => {
-  //         if (result.name) {
-  //           props.updateSession();
-  //         } else {
-  //           alert("Unable to create user: User already exists");
-  //         }
-  //       })
-  //       .catch(err => console.error(err));
-  //   }
-  // }
+      fetch(`${SERVER_URL}/users/new`, {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(newUser)
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.name) {
+            props.updateSession();
+          } else {
+            alert("Unable to create user: User already exists");
+          }
+        })
+        .catch(err => console.error(err));
+    }
+  }
 
   return (
     <div className="SignUp">
@@ -83,6 +83,7 @@ function SignUp(props) {
             type="text"
             onChange={(event) => setUserFirstName(event.target.value)}
           />
+          <div className='Placeholder'>Email</div>
         </label>
         <label>
           <p>Last Name</p>
@@ -97,20 +98,21 @@ function SignUp(props) {
             type="email"
             onChange={(event) => setEmail(event.target.value)}
           />
+          <div className='Placeholder'>Username</div>
         </label>
-        <label>
-          <p>Password</p>
+        <label className="InputText">
           <input
             type="password"
             onChange={(event) => setPassword(event.target.value)}
           />
+          <div className='Placeholder'>Password</div>
         </label>
-        <label>
-          <p>Verify Password</p>
+        <label className="InputText">
           <input
             type="password"
             onChange={(event) => setPasswordVerify(event.target.value)}
           />
+          <div className='Placeholder'>Verify Password</div>
         </label>
         <div className='SubmitButton'>
           <button type="submit">

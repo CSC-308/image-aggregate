@@ -1,4 +1,30 @@
 .Collection {
-  column-count: 3;
+  background-image: url(./../collections-page-background2.png);
+  background-size: cover;
+  min-height: 89.75vh;
+}
+
+.CollectionImages {
+  column-count: 4;
   column-gap: 10px;
+}
+
+.Collection h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.Collection p {
+  text-align: center;
+}
+
+.CollectionImage {
+  transition-duration: 0.4s;
+  margin: 25px;
+}
+
+.CollectionImage:hover {
+  transform: scale(1.1);
 }

@@ -30,19 +30,19 @@ function SignIn(props) {
   return (
     <div className="SignIn">
       <form onSubmit={handleSubmit}>
-        <label>
-          <p>Username</p>
+        <label className="InputText">
           <input
             type="text"
             onChange={(event) => setUsername(event.target.value)}
           />
+          <div className='Placeholder'>Username</div>
         </label>
-        <label>
-          <p>Password</p>
+        <label className="InputText">
           <input
             type="password"
             onChange={(event) => setPassword(event.target.value)}
           />
+          <div className='Placeholder'>Password</div>
         </label>
         <div className='SubmitButton'>
           <button type="submit">Sign In</button>
