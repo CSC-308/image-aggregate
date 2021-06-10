@@ -1,7 +1,5 @@
-[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.png?branch=master-server)](https://www.travis-ci.com/CSC-308/image-aggregate)
-[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.png?branch=master-client)](https://www.travis-ci.com/CSC-308/image-aggregate)
-
 ~~~ Client ~~~
+[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.png?branch=master-client)](https://www.travis-ci.com/CSC-308/image-aggregate)
 
 All client code exists in the master-client branch. The master-client branch is
 also the branch the CI/CD server points to for production. Any and all changes
@@ -20,6 +18,7 @@ We use ESLint to monitor our code quality and style.
 Installation and use: https://eslint.org/docs/user-guide/getting-started
 
 ~~~ Server ~~~
+[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.png?branch=master-server)](https://www.travis-ci.com/CSC-308/image-aggregate)
 
 All server code exists in the master-server branch. The master-server branch is
 also the branch the CI/CD server points to for production. Any and all changes
