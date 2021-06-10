@@ -57,8 +57,6 @@ run continuous integration through Travis CI.
 
 https://www.travis-ci.com/github/CSC-308/image-aggregate
 
-[![Build
-Status](https://www.travis-ci.com/CSC-308/image-aggregate.svg?branch=master-server)](https://www.travis-ci.com/CSC-308/image-aggregate)
+[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.svg?branch=master-server)](https://www.travis-ci.com/CSC-308/image-aggregate)
 
-[![Build
-Status](https://www.travis-ci.com/CSC-308/image-aggregate.svg?branch=master-client)](https://www.travis-ci.com/CSC-308/image-aggregate)
+[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.svg?branch=master-client)](https://www.travis-ci.com/CSC-308/image-aggregate)
