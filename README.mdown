@@ -52,7 +52,9 @@ Both master-server and master-client branches have a test_coverage.html file at
 the root containing a breakdown of the test coverage. Pytest was used for the
 backend and cypress was used for the frontend and end-to-end testing.
 
-![](https://github.com/CSC-308/image-aggregate/blob/master-server/test_coverage.html)
+https://github.com/CSC-308/image-aggregate/blob/master-server/test_coverage.html
+
+https://github.com/CSC-308/image-aggregate/blob/master-client/test_coverage.html
 
 ## Continuous Integration
 
