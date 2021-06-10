@@ -46,15 +46,27 @@ Use: http://pylint.pycqa.org/en/latest/user_guide/run.html
 Pylint or ESLint with their default configuration (standard style guide) must be ran (automatically or
 manually) on every file created and or edited by a developer.
 
-## Test Coverage
+## Unit/Integration Tests
 
 Both master-server and master-client branches have a test_coverage.html file at
 the root containing a breakdown of the test coverage. Pytest was used for the
-backend and cypress was used for the frontend and end-to-end testing.
+backend and cypress was used for the frontend.
 
 https://github.com/CSC-308/image-aggregate/blob/master-server/test_coverage.html
 
 https://github.com/CSC-308/image-aggregate/blob/master-client/test_coverage.html
+
+## Acceptance Tests
+
+Cypress was used for running automatic acceptance tests. The acceptance tests are
+located on the master-client branch in the cypress/integration/examples subdirectory.
+
+These tests can be exectuted by running:
+
+* npx cypress run
+
+from the master-client's root directory. These tests are also configured to run as part
+of the CI/CD pipeline.
 
 ## Continuous Integration
 
