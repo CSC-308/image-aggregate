@@ -48,7 +48,7 @@ manually) on every file created and or edited by a developer.
 
 Both master-server and master-client branches have a test_coverage.html file at
 the root containing a breakdown of the test coverage. Pytest was used for the
-backend and cypress was used for the frontend.
+backend and cypress was used for the frontend and end-to-end testing.
 
 ~~~ Continuous Integration ~~~
 
