@@ -1,3 +1,6 @@
+[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.png?branch=master-server)](https://www.travis-ci.com/CSC-308/image-aggregate)
+[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.png?branch=master-client)](https://www.travis-ci.com/CSC-308/image-aggregate)
+
 ~~~ Client ~~~
 
 All client code exists in the master-client branch. The master-client branch is
@@ -9,8 +12,8 @@ https://image-aggregate-client.herokuapp.com
 To deploy the app locally, make sure the .env file's environment variables are
 correct for your current setup and you should just have to run:
 
- npm install
- npm start
+* npm install
+* npm start
 
 We use ESLint to monitor our code quality and style.
 
@@ -27,11 +30,11 @@ https://image-aggregate-server.herokuapp.com/
 To deploy the server locally, make sure the .env file's environment variables
 are correct for your current setup and then run:
 
- export FLASK_APP=api
- export FLASK_ENV=development|production
- pip install setuptools
- pip install -e .
- flask run --cert=cert.pem --key=key.pem
+* export FLASK_APP=api
+* export FLASK_ENV=development|production
+* pip install setuptools
+* pip install -e .
+* flask run --cert=cert.pem --key=key.pem
 
 We use Pylint to monitor our code quality and style.
 
@@ -56,7 +59,3 @@ Both master-server and master-client branches have .travis.yml files setup to
 run continuous integration through Travis CI.
 
 https://www.travis-ci.com/github/CSC-308/image-aggregate
-
-[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.svg?branch=master-server)](https://www.travis-ci.com/CSC-308/image-aggregate)
-
-[![Build Status](https://www.travis-ci.com/CSC-308/image-aggregate.svg?branch=master-client)](https://www.travis-ci.com/CSC-308/image-aggregate)
