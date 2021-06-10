@@ -10,6 +10,7 @@ function SignIn(props) {
 
     if (formIsValid()) {
       setError('');
+      window.location = process.env.REACT_APP_SERVER_URL + '/test/user/login';
     }
   }
 
